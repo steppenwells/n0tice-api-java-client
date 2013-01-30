@@ -57,6 +57,7 @@ public class SearchParserTest {
 		assertEquals(-0.154179, report.getPlace().getLongitude(), 0);
 		assertEquals(new DateTime("2012-01-16T14:49:08Z", DateTimeZone.UTC), new DateTime(report.getCreated()));
 		assertEquals(new DateTime("2012-01-16T14:49:08Z", DateTimeZone.UTC), new DateTime(report.getModified()));
+		assertEquals("APPROVED", report.getModerationStatus());
 	}
 	
 	@Test
