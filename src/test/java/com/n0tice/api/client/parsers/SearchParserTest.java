@@ -1,6 +1,5 @@
 package com.n0tice.api.client.parsers;
 
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 
 import org.joda.time.DateTime;

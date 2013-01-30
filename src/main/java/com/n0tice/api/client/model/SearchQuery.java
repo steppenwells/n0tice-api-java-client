@@ -25,6 +25,7 @@ public class SearchQuery {
 	private DateTime endingAfter;
 	private Boolean hasImages;
 	private Boolean awaitingModeration;
+	private String moderationStatus;
 	
 	public SearchQuery q(String q) {
 		this.q = q;
@@ -120,6 +121,11 @@ public class SearchQuery {
 		return this;
 	}
 	
+	public SearchQuery moderationStatus(String moderationStatus) {
+		this.moderationStatus = moderationStatus;
+		return this;
+	}
+	
 	public String getType() {
 		return type;
 	}
@@ -187,6 +193,10 @@ public class SearchQuery {
 	public Boolean getAwaitingModeration() {
 		return awaitingModeration;
 	}
+	
+	public String getModerationStatus() {
+		return moderationStatus;
+	}
 
 	@Override
 	public String toString() {
@@ -195,10 +205,11 @@ public class SearchQuery {
 				+ ", hasImages=" + hasImages + ", latitude=" + latitude
 				+ ", limit=" + limit + ", location=" + location
 				+ ", longitude=" + longitude + ", maximumFlags=" + maximumFlags
-				+ ", noticeBoard=" + noticeBoard + ", page=" + page + ", q="
-				+ q + ", radius=" + radius + ", startingAfter=" + startingAfter
-				+ ", tags=" + tags + ", type=" + type + ", user=" + user
-				+ ", via=" + via + "]";
+				+ ", moderationStatus=" + moderationStatus + ", noticeBoard="
+				+ noticeBoard + ", page=" + page + ", q=" + q + ", radius="
+				+ radius + ", startingAfter=" + startingAfter + ", tags="
+				+ tags + ", type=" + type + ", user=" + user + ", via=" + via
+				+ "]";
 	}
-
+	
 }

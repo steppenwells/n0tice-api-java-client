@@ -26,6 +26,7 @@ import com.n0tice.api.client.model.Video;
 public class SearchParser {
 
 	private static final String AWAITING_MODERATION = "awaitingModeration";
+	private static final String MODERATION_STATUS = "moderationStatus";
 	private static final String END_DATE = "endDate";
 	private static final String REOCCURS_TO = "reoccursTo";
 	private static final String REOCCURS = "reoccurs";
@@ -130,7 +131,8 @@ public class SearchParser {
 			reposts = contentItemJSON.getInt(REPOSTS);			
 		}
 		
-		final Boolean awaitingModeration = contentItemJSON.has(AWAITING_MODERATION) ? contentItemJSON.getBoolean(AWAITING_MODERATION) : null;
+		final Boolean awaitingModeration = contentItemJSON.has(AWAITING_MODERATION) ? contentItemJSON.getBoolean(AWAITING_MODERATION) : null;		
+		final String moderationStatus = contentItemJSON.has(MODERATION_STATUS) ? contentItemJSON.getString(MODERATION_STATUS) : null;
 		
 		return new Content(contentItemJSON.getString(ID), 
 				contentItemJSON.getString(API_URL), 
@@ -150,7 +152,8 @@ public class SearchParser {
 				reoccursTo,
 				interestingVotes,
 				reposts,
-				awaitingModeration
+				awaitingModeration,
+				moderationStatus
 				);
 	}
 	

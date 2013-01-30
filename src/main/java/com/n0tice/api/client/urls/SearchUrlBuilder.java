@@ -72,6 +72,9 @@ public class SearchUrlBuilder {
 		if (searchQuery.getAwaitingModeration() != null) {
 			url.appendParameter("awaitingModeration", Boolean.toString(searchQuery.getAwaitingModeration()));
 		}
+		if (searchQuery.getModerationStatus() != null) {
+			url.appendParameter("moderationStatus", searchQuery.getModerationStatus());
+		}
 		if (searchQuery.getStartingAfter() != null) {
 			url.appendParameter("startingAfter", ISODateTimeFormat.dateTimeNoMillis().print(searchQuery.getStartingAfter()));
 		}

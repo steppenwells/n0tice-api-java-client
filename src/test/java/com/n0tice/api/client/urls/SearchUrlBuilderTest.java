@@ -1,5 +1,6 @@
 package com.n0tice.api.client.urls;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 
 import org.joda.time.DateTime;
@@ -103,6 +104,11 @@ public class SearchUrlBuilderTest {
 	@Test
 	public void canSpecifyAwaitingModeration() throws Exception {
 		assertEquals("http://api.local/search?awaitingModeration=true", builder.toUrl(new SearchQuery().awaitingModeration(true)));
+	}
+	
+	@Test
+	public void canSpecifyModerationStatus() throws Exception {
+		assertEquals("http://api.local/search?moderationStatus=AWAITING", builder.toUrl(new SearchQuery().moderationStatus("AWAITING")));
 	}
 	
 	@Test
