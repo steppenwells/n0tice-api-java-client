@@ -45,6 +45,7 @@ import com.n0tice.api.client.exceptions.ParsingException;
 import com.n0tice.api.client.model.AccessToken;
 import com.n0tice.api.client.model.Content;
 import com.n0tice.api.client.model.Group;
+import com.n0tice.api.client.model.HistoryItem;
 import com.n0tice.api.client.model.MediaFile;
 import com.n0tice.api.client.model.MediaType;
 import com.n0tice.api.client.model.ModerationComplaintType;
@@ -57,6 +58,7 @@ import com.n0tice.api.client.model.Update;
 import com.n0tice.api.client.model.User;
 import com.n0tice.api.client.model.VideoAttachment;
 import com.n0tice.api.client.oauth.N0ticeOauthApi;
+import com.n0tice.api.client.parsers.HistoryParser;
 import com.n0tice.api.client.parsers.NoticeboardParser;
 import com.n0tice.api.client.parsers.SearchParser;
 import com.n0tice.api.client.parsers.UserParser;
@@ -80,9 +82,11 @@ public class N0ticeApi {
 	private final SearchParser searchParser;
 	private final UserParser userParser;
 	private final NoticeboardParser noticeboardParser;
+	private final HistoryParser historyParser;
 
 	private OAuthService service;
 	private Token scribeAccessToken;
+
 	
 	public N0ticeApi(String apiUrl) {
 		this.apiUrl = apiUrl;
@@ -92,6 +96,7 @@ public class N0ticeApi {
 		this.searchParser = new SearchParser();
 		this.userParser = new UserParser();
 		this.noticeboardParser = new NoticeboardParser();
+		this.historyParser = new HistoryParser();
 	}
 	
 	public N0ticeApi(String apiUrl, String consumerKey, String consumerSecret, AccessToken accessToken) {
@@ -102,7 +107,8 @@ public class N0ticeApi {
 		this.searchParser = new SearchParser();
 		this.userParser = new UserParser();
 		this.noticeboardParser = new NoticeboardParser();
-
+		this.historyParser = new HistoryParser();
+		
 		service = new ServiceBuilder().provider(new N0ticeOauthApi(apiUrl))
 			.apiKey(consumerKey)
 			.apiSecret(consumerSecret)
@@ -112,6 +118,10 @@ public class N0ticeApi {
 	
 	public Content get(String id) throws HttpFetchException, NotFoundException, ParsingException {
 		return searchParser.parseReport(httpFetcher.fetchContent(urlBuilder.get(id), UTF_8));
+	}
+	
+	public List<HistoryItem> getHistory(String id) throws NotFoundException, ParsingException, HttpFetchException {
+		return historyParser.parse(httpFetcher.fetchContent(urlBuilder.getHistory(id), UTF_8));
 	}
 	
 	public Update getUpdate(String id) throws HttpFetchException, NotFoundException, ParsingException {

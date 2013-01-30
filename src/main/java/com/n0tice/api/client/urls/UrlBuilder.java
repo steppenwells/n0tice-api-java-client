@@ -6,6 +6,7 @@ import java.net.URLEncoder;
 
 public class UrlBuilder {
 
+	private static final String HISTORY = "history";
 	private static final String CLOSE = "close";
 	private static final String UTF_8 = "UTF-8";
 	
@@ -45,6 +46,10 @@ public class UrlBuilder {
 
 	public String closeNoticeboard(String domain) {
 		return noticeBoard(domain) + "/" + CLOSE;
+	}
+	
+	public String getHistory(String id) {
+		return get(id) + "/" + HISTORY;
 	}
 	
 	private String urlEncode(String value) {
