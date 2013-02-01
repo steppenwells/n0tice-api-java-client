@@ -6,11 +6,13 @@ public class Image {
 	private final String medium;
 	private final String large;
 	private final String orientation;
+	private final String mediumlandscape;
 	
-	public Image(String small, String medium, String large, String orientation) {
+	public Image(String small, String medium, String large, String mediumlandscape, String orientation) {
 		this.small = small;
 		this.medium = medium;
 		this.large = large;
+		this.mediumlandscape = mediumlandscape;		
 		this.orientation = orientation;
 	}
 
@@ -20,6 +22,10 @@ public class Image {
 
 	public String getMedium() {
 		return medium;
+	}
+	
+	public String getMediumlandscape() {
+		return mediumlandscape;
 	}
 
 	public String getLarge() {
@@ -33,7 +39,8 @@ public class Image {
 	@Override
 	public String toString() {
 		return "Image [large=" + large + ", medium=" + medium
-				+ ", orientation=" + orientation + ", small=" + small + "]";
+				+ ", mediumlandscape=" + mediumlandscape + ", orientation="
+				+ orientation + ", small=" + small + "]";
 	}
-		
+	
 }

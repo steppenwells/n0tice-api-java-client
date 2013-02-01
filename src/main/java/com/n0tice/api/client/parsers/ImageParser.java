@@ -9,11 +9,14 @@ public class ImageParser {
 	
 	private static final String SMALL = "small";
 	private static final String MEDIUM = "medium";
+	private static final String MEDIUMLANDSCAPE = "mediumlandscape";
 	private static final String LARGE = "large";
 	private static final String ORIENTATION = "orientation";
 	
 	public Image parseImage(JSONObject imageJson) throws JSONException {
-		return new Image(imageJson.getString(SMALL), imageJson.getString(MEDIUM), imageJson.getString(LARGE), 
+		return new Image(imageJson.getString(SMALL), imageJson.getString(MEDIUM), 
+				imageJson.getString(LARGE), 
+				imageJson.has(MEDIUMLANDSCAPE) ? imageJson.getString(MEDIUMLANDSCAPE) : null,
 				imageJson.has(ORIENTATION) ? imageJson.getString(ORIENTATION) : null);
 	}
 
