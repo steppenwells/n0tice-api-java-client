@@ -268,7 +268,8 @@ public class SearchParser {
 	}
 	
 	private Video parseVideo(JSONObject videoJson) throws JSONException {
-		return new Video(videoJson.has(ORIGINAL) ? videoJson.getString(ORIGINAL) : null);
+		return new Video(videoJson.has(ID) ? videoJson.getString(ID) : null,
+				videoJson.has("image") ? imageParser.parseImage(videoJson.getJSONObject("image")) : null);
 	}
 	
 }
