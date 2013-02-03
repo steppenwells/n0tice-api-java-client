@@ -12,7 +12,7 @@ public class SearchQuery {
 	private Integer limit = null;
 	private List<String> tags = new ArrayList<String>();
 	private String type = null;
-	private String noticeBoard = null;
+	private List<String> noticeBoards = new ArrayList<String>();
 	private String location = null;
 	private String user = null;
 	private Double latitude;
@@ -98,7 +98,7 @@ public class SearchQuery {
 	}
 	
 	public SearchQuery noticeBoard(String noticeBoard) {
-		this.noticeBoard = noticeBoard;
+		noticeBoards.add(noticeBoard);
 		return this;
 	}
 	
@@ -136,8 +136,8 @@ public class SearchQuery {
 		return type;
 	}
 
-	public String getNoticeBoard() {
-		return noticeBoard;
+	public List<String> getNoticeBoards() {
+		return noticeBoards;
 	}
 
 	public String getQ() {
@@ -212,7 +212,7 @@ public class SearchQuery {
 	public String toString() {
 		return "SearchQuery [q=" + q + ", page=" + page + ", limit=" + limit
 				+ ", tags=" + tags + ", type=" + type + ", noticeBoard="
-				+ noticeBoard + ", location=" + location + ", user=" + user
+				+ noticeBoards + ", location=" + location + ", user=" + user
 				+ ", latitude=" + latitude + ", longitude=" + longitude
 				+ ", radius=" + radius + ", country=" + country + ", via="
 				+ via + ", maximumFlags=" + maximumFlags + ", minimumFlags="

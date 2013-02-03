@@ -1,6 +1,5 @@
 package com.n0tice.api.client.urls;
 
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 
 import org.joda.time.DateTime;
@@ -55,6 +54,11 @@ public class SearchUrlBuilderTest {
 		assertEquals("http://api.local/search?noticeboard=aboard", builder.toUrl(new SearchQuery().noticeBoard("aboard")));
 	}
 	
+	@Test
+	public void multipleNoticeboardsAreCommaSeperatedTogether() throws Exception {
+		assertEquals("http://api.local/search?noticeboard=formby%2Cstreetart", builder.toUrl(new SearchQuery().noticeBoard("formby").noticeBoard("streetart")));
+	}
+		
 	@Test
 	public void canBuildMultifieldQueries() throws Exception {
 		assertEquals("http://api.local/search?type=event&noticeboard=formby", builder.toUrl(new SearchQuery().type("event").noticeBoard("formby")));

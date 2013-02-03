@@ -35,15 +35,15 @@ public class SearchUrlBuilder {
 			url.appendParameter("type", searchQuery.getType());		
 
 		}
-		if (searchQuery.getNoticeBoard() != null) {
-			url.appendParameter("noticeboard", searchQuery.getNoticeBoard());
+		if (!searchQuery.getNoticeBoards().isEmpty()) {
+			url.appendParameter("noticeboard", COMMA_JOINER.join(searchQuery.getNoticeBoards()));
+		}
+		if (!searchQuery.getTags().isEmpty()) {
+			url.appendParameter("tags", COMMA_JOINER.join(searchQuery.getTags()));
 		}
 		if (searchQuery.getUser() != null) {
 			url.appendParameter("user", searchQuery.getUser());
 		}		
-		if (!searchQuery.getTags().isEmpty()) {
-			url.appendParameter("tags", COMMA_JOINER.join(searchQuery.getTags()));
-		}
 		if (searchQuery.getLocation() != null) {
 			url.appendParameter("location", searchQuery.getLocation());
 		}
