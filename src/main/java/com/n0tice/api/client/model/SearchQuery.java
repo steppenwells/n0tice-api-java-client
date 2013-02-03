@@ -21,6 +21,7 @@ public class SearchQuery {
 	private String country;
 	private String via;
 	private Integer maximumFlags;
+	private Integer minimumFlags;
 	private DateTime startingAfter;
 	private DateTime endingAfter;
 	private Boolean hasImages;
@@ -88,6 +89,11 @@ public class SearchQuery {
 	
 	public SearchQuery maximumFlags(int maximumFlags) {
 		this.maximumFlags = maximumFlags;
+		return this;
+	}
+	
+	public SearchQuery minimumFlags(int minimumFlags) {
+		this.minimumFlags = minimumFlags;
 		return this;
 	}
 	
@@ -178,6 +184,10 @@ public class SearchQuery {
 		return maximumFlags;
 	}
 	
+	public Integer getMinimumFlags() {
+		return minimumFlags;
+	}
+
 	public DateTime getStartingAfter() {
 		return startingAfter;
 	}
@@ -200,16 +210,16 @@ public class SearchQuery {
 
 	@Override
 	public String toString() {
-		return "SearchQuery [awaitingModeration=" + awaitingModeration
-				+ ", country=" + country + ", endingAfter=" + endingAfter
-				+ ", hasImages=" + hasImages + ", latitude=" + latitude
-				+ ", limit=" + limit + ", location=" + location
-				+ ", longitude=" + longitude + ", maximumFlags=" + maximumFlags
-				+ ", moderationStatus=" + moderationStatus + ", noticeBoard="
-				+ noticeBoard + ", page=" + page + ", q=" + q + ", radius="
-				+ radius + ", startingAfter=" + startingAfter + ", tags="
-				+ tags + ", type=" + type + ", user=" + user + ", via=" + via
-				+ "]";
+		return "SearchQuery [q=" + q + ", page=" + page + ", limit=" + limit
+				+ ", tags=" + tags + ", type=" + type + ", noticeBoard="
+				+ noticeBoard + ", location=" + location + ", user=" + user
+				+ ", latitude=" + latitude + ", longitude=" + longitude
+				+ ", radius=" + radius + ", country=" + country + ", via="
+				+ via + ", maximumFlags=" + maximumFlags + ", minimumFlags="
+				+ minimumFlags + ", startingAfter=" + startingAfter
+				+ ", endingAfter=" + endingAfter + ", hasImages=" + hasImages
+				+ ", awaitingModeration=" + awaitingModeration
+				+ ", moderationStatus=" + moderationStatus + "]";
 	}
 	
 }

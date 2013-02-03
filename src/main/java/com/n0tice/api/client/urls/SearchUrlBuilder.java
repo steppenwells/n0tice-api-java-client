@@ -66,6 +66,9 @@ public class SearchUrlBuilder {
 		if (searchQuery.getMaximumFlags() != null) {
 			url.appendParameter("maximumFlags", Integer.toString(searchQuery.getMaximumFlags()));
 		}
+		if (searchQuery.getMinimumFlags() != null) {
+			url.appendParameter("minimumFlags", Integer.toString(searchQuery.getMinimumFlags()));
+		}
 		if (searchQuery.getHasImages() != null) {
 			url.appendParameter("hasImages", Boolean.toString(searchQuery.getHasImages()));
 		}

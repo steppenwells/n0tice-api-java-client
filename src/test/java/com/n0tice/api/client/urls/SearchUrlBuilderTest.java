@@ -97,6 +97,11 @@ public class SearchUrlBuilderTest {
 	}
 	
 	@Test
+	public void canSpecifyMinimumFlags() throws Exception {
+		assertEquals("http://api.local/search?minimumFlags=2", builder.toUrl(new SearchQuery().minimumFlags(2)));
+	}
+	
+	@Test
 	public void canSpecifyHasImages() throws Exception {
 		assertEquals("http://api.local/search?hasImages=true", builder.toUrl(new SearchQuery().hasImages(true)));
 	}
