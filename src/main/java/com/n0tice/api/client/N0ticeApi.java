@@ -48,6 +48,7 @@ import com.n0tice.api.client.model.Group;
 import com.n0tice.api.client.model.HistoryItem;
 import com.n0tice.api.client.model.MediaFile;
 import com.n0tice.api.client.model.MediaType;
+import com.n0tice.api.client.model.ModerationComplaint;
 import com.n0tice.api.client.model.ModerationComplaintType;
 import com.n0tice.api.client.model.NewUserResponse;
 import com.n0tice.api.client.model.Noticeboard;
@@ -59,6 +60,7 @@ import com.n0tice.api.client.model.User;
 import com.n0tice.api.client.model.VideoAttachment;
 import com.n0tice.api.client.oauth.N0ticeOauthApi;
 import com.n0tice.api.client.parsers.HistoryParser;
+import com.n0tice.api.client.parsers.ModerationComplaintParser;
 import com.n0tice.api.client.parsers.NoticeboardParser;
 import com.n0tice.api.client.parsers.SearchParser;
 import com.n0tice.api.client.parsers.UserParser;
@@ -82,11 +84,11 @@ public class N0ticeApi {
 	private final SearchParser searchParser;
 	private final UserParser userParser;
 	private final NoticeboardParser noticeboardParser;
+	private final ModerationComplaintParser moderationComplaintParser;
 	private final HistoryParser historyParser;
 
 	private OAuthService service;
 	private Token scribeAccessToken;
-
 	
 	public N0ticeApi(String apiUrl) {
 		this.apiUrl = apiUrl;
@@ -97,6 +99,7 @@ public class N0ticeApi {
 		this.userParser = new UserParser();
 		this.noticeboardParser = new NoticeboardParser();
 		this.historyParser = new HistoryParser();
+		this.moderationComplaintParser = new ModerationComplaintParser();
 	}
 	
 	public N0ticeApi(String apiUrl, String consumerKey, String consumerSecret, AccessToken accessToken) {
@@ -108,6 +111,7 @@ public class N0ticeApi {
 		this.userParser = new UserParser();
 		this.noticeboardParser = new NoticeboardParser();
 		this.historyParser = new HistoryParser();
+		this.moderationComplaintParser = new ModerationComplaintParser();
 		
 		service = new ServiceBuilder().provider(new N0ticeOauthApi(apiUrl))
 			.apiKey(consumerKey)
@@ -122,6 +126,10 @@ public class N0ticeApi {
 	
 	public List<HistoryItem> getHistory(String id) throws NotFoundException, ParsingException, HttpFetchException {
 		return historyParser.parse(httpFetcher.fetchContent(urlBuilder.getHistory(id), UTF_8));
+	}
+	
+	public List<ModerationComplaint> getModerationComplains(String id) throws NotFoundException, HttpFetchException, ParsingException {
+		return moderationComplaintParser.parse(httpFetcher.fetchContent(urlBuilder.get(id) + "/flags", UTF_8));
 	}
 	
 	public Update getUpdate(String id) throws HttpFetchException, NotFoundException, ParsingException {

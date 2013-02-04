@@ -52,7 +52,6 @@ public class SearchParser {
 	private static final String REPOSTS = "reposts";
 	private static final String COUNTRY = "country";
 	private static final String VIA = "via";
-	private static final String ORIGINAL = "original";
 	
 	private static DateTimeFormatter dateFormatter = ISODateTimeFormat.dateTimeNoMillis().withOffsetParsed();
 	
