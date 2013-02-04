@@ -128,8 +128,17 @@ public class N0ticeApi {
 		return historyParser.parse(httpFetcher.fetchContent(urlBuilder.getHistory(id), UTF_8));
 	}
 	
-	public List<ModerationComplaint> getModerationComplains(String id) throws NotFoundException, HttpFetchException, ParsingException {
-		return moderationComplaintParser.parse(httpFetcher.fetchContent(urlBuilder.get(id) + "/flags", UTF_8));
+	public List<ModerationComplaint> getModerationComplains(String id) throws AuthorisationException, BadRequestException, NotAllowedException, N0ticeException {
+		final OAuthRequest request = new OAuthRequest(Verb.GET, urlBuilder.get(id) + "/flags");
+		oauthSignRequest(request);
+		
+		final Response response = request.send();
+		if (response.getCode() == 200) {
+			return moderationComplaintParser.parse(response.getBody());
+		}
+		
+		handleExceptions(response);
+		throw new N0ticeException(response.getBody());		
 	}
 	
 	public Update getUpdate(String id) throws HttpFetchException, NotFoundException, ParsingException {
