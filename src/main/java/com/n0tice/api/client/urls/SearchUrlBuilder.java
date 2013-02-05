@@ -84,6 +84,9 @@ public class SearchUrlBuilder {
 		if (searchQuery.getEndingAfter() != null) {
 			url.appendParameter("endingAfter", ISODateTimeFormat.dateTimeNoMillis().print(searchQuery.getEndingAfter()));
 		}
+		if (searchQuery.getOrder() != null) {
+			url.appendParameter("order", searchQuery.getOrder());
+		}
 		
 		return url.toString();
 	}

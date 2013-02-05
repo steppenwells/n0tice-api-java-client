@@ -130,4 +130,9 @@ public class SearchUrlBuilderTest {
 		assertEquals("http://api.local/search?endingAfter=2012-02-12T10%3A12%3A00Z", builder.toUrl(new SearchQuery().endingAfter(new DateTime(2012, 2, 12, 10, 12, 0))));
 	}
 	
+	@Test
+	public void canSpecifyOrder() throws Exception {
+		assertEquals("http://api.local/search?order=someway", builder.toUrl(new SearchQuery().order("someway")));
+	}
+	
 }

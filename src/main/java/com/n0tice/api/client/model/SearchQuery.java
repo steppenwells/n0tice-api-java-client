@@ -27,6 +27,7 @@ public class SearchQuery {
 	private Boolean hasImages;
 	private Boolean awaitingModeration;
 	private String moderationStatus;
+	private String order;
 	
 	public SearchQuery q(String q) {
 		this.q = q;
@@ -132,6 +133,11 @@ public class SearchQuery {
 		return this;
 	}
 	
+	public SearchQuery order(String order) {
+		this.order = order;
+		return this;
+	}
+	
 	public String getType() {
 		return type;
 	}
@@ -207,19 +213,24 @@ public class SearchQuery {
 	public String getModerationStatus() {
 		return moderationStatus;
 	}
+	
+	public String getOrder() {
+		return order;
+	}
 
 	@Override
 	public String toString() {
-		return "SearchQuery [q=" + q + ", page=" + page + ", limit=" + limit
-				+ ", tags=" + tags + ", type=" + type + ", noticeBoard="
-				+ noticeBoards + ", location=" + location + ", user=" + user
-				+ ", latitude=" + latitude + ", longitude=" + longitude
-				+ ", radius=" + radius + ", country=" + country + ", via="
-				+ via + ", maximumFlags=" + maximumFlags + ", minimumFlags="
-				+ minimumFlags + ", startingAfter=" + startingAfter
-				+ ", endingAfter=" + endingAfter + ", hasImages=" + hasImages
-				+ ", awaitingModeration=" + awaitingModeration
-				+ ", moderationStatus=" + moderationStatus + "]";
+		return "SearchQuery [awaitingModeration=" + awaitingModeration
+				+ ", country=" + country + ", endingAfter=" + endingAfter
+				+ ", hasImages=" + hasImages + ", latitude=" + latitude
+				+ ", limit=" + limit + ", location=" + location
+				+ ", longitude=" + longitude + ", maximumFlags=" + maximumFlags
+				+ ", minimumFlags=" + minimumFlags + ", moderationStatus="
+				+ moderationStatus + ", noticeBoards=" + noticeBoards
+				+ ", order=" + order + ", page=" + page + ", q=" + q
+				+ ", radius=" + radius + ", startingAfter=" + startingAfter
+				+ ", tags=" + tags + ", type=" + type + ", user=" + user
+				+ ", via=" + via + "]";
 	}
 	
 }
