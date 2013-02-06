@@ -11,6 +11,7 @@ public class ImageParser {
 	private static final String MEDIUM = "medium";
 	private static final String MEDIUMLANDSCAPE = "mediumlandscape";
 	private static final String LARGE = "large";
+	private static final String EXTRALARGE = "extralarge";
 	private static final String ORIENTATION = "orientation";
 	
 	public Image parseImage(JSONObject imageJson) throws JSONException {
@@ -18,6 +19,7 @@ public class ImageParser {
 				imageJson.has(SMALL) ? imageJson.getString(SMALL) : null,
 				imageJson.has(MEDIUM) ? imageJson.getString(MEDIUM) : null,
 				imageJson.has(LARGE) ? imageJson.getString(LARGE) : null,
+				imageJson.has(EXTRALARGE) ? imageJson.getString(EXTRALARGE) : null,
 				imageJson.has(MEDIUMLANDSCAPE) ? imageJson.getString(MEDIUMLANDSCAPE) : null,
 				imageJson.has(ORIENTATION) ? imageJson.getString(ORIENTATION) : null);
 	}
