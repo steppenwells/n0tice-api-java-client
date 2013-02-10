@@ -430,10 +430,11 @@ public class N0ticeApi {
 		throw new N0ticeException(response.getBody());
 	}
 	
-	public boolean approve(String id) throws NotFoundException, NotAllowedException, AuthorisationException, BadRequestException, N0ticeException {
+	public boolean approve(String id, String notes) throws NotFoundException, NotAllowedException, AuthorisationException, BadRequestException, N0ticeException {
 		OAuthRequest request = new OAuthRequest(Verb.POST, apiUrl + "/" + id + "/approve");
+		addBodyParameter(request, "notes", notes);
 		oauthSignRequest(request);
-
+		
 		final Response response = request.send();		
 		if (response.getCode() == 200) {
 	    	return true;

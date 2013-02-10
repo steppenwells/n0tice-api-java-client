@@ -15,6 +15,11 @@ import com.n0tice.api.client.model.HistoryItem;
 
 public class HistoryParser {
 
+	private static final String DATE = "date";
+	private static final String USER = "user";
+	private static final String TYPE = "type";
+	private static final String NOTES = "notes";
+
 	private static DateTimeFormatter dateFormatter = ISODateTimeFormat.dateTimeNoMillis().withOffsetParsed();
 	
 	private final UserParser userParser;
@@ -29,9 +34,11 @@ public class HistoryParser {
 			JSONArray historyItemsJSON = new JSONArray(json);
 			for (int i = 0; i < historyItemsJSON.length(); i++) {
 				final JSONObject historyItem = historyItemsJSON.getJSONObject(i);
-				historyItems.add(new HistoryItem(userParser.jsonToUser(historyItem.getJSONObject("user")),
-						historyItem.getString("type"),
-						parseDate(historyItem.getString("date")).toDate()));
+				String notes = historyItem.has(NOTES) ? historyItem.getString(NOTES) : null;
+				historyItems.add(new HistoryItem(userParser.jsonToUser(historyItem.getJSONObject(USER)),
+						historyItem.getString(TYPE),
+						parseDate(historyItem.getString(DATE)).toDate(),
+						notes));
 			}
 			
 		} catch (JSONException e) {
