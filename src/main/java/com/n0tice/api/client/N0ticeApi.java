@@ -9,6 +9,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.crypto.Mac;
@@ -59,6 +60,7 @@ import com.n0tice.api.client.model.Update;
 import com.n0tice.api.client.model.User;
 import com.n0tice.api.client.model.VideoAttachment;
 import com.n0tice.api.client.oauth.N0ticeOauthApi;
+import com.n0tice.api.client.parsers.ExifParser;
 import com.n0tice.api.client.parsers.HistoryParser;
 import com.n0tice.api.client.parsers.ModerationComplaintParser;
 import com.n0tice.api.client.parsers.NoticeboardParser;
@@ -86,6 +88,7 @@ public class N0ticeApi {
 	private final NoticeboardParser noticeboardParser;
 	private final ModerationComplaintParser moderationComplaintParser;
 	private final HistoryParser historyParser;
+	private final ExifParser exifParser;
 
 	private OAuthService service;
 	private Token scribeAccessToken;
@@ -100,6 +103,7 @@ public class N0ticeApi {
 		this.noticeboardParser = new NoticeboardParser();
 		this.historyParser = new HistoryParser();
 		this.moderationComplaintParser = new ModerationComplaintParser();
+		this.exifParser = new ExifParser();
 	}
 	
 	public N0ticeApi(String apiUrl, String consumerKey, String consumerSecret, AccessToken accessToken) {
@@ -112,6 +116,7 @@ public class N0ticeApi {
 		this.noticeboardParser = new NoticeboardParser();
 		this.historyParser = new HistoryParser();
 		this.moderationComplaintParser = new ModerationComplaintParser();
+		this.exifParser = new ExifParser();
 		
 		service = new ServiceBuilder().provider(new N0ticeOauthApi(apiUrl))
 			.apiKey(consumerKey)
@@ -152,6 +157,19 @@ public class N0ticeApi {
 		final Response response = request.send();
 		if (response.getCode() == 200) {
 			return searchParser.parseReport(response.getBody());
+		}
+		
+		handleExceptions(response);
+		throw new N0ticeException(response.getBody());
+	}
+	
+	public Map<String, Map<String, String>> imageExif(String id) throws NotFoundException, AuthorisationException, BadRequestException, NotAllowedException, N0ticeException {
+		final OAuthRequest request = new OAuthRequest(Verb.GET, urlBuilder.get("image/" + id));
+		oauthSignRequest(request);
+
+		final Response response = request.send();
+		if (response.getCode() == 200) {
+			return exifParser.parse(response.getBody());
 		}
 		
 		handleExceptions(response);
