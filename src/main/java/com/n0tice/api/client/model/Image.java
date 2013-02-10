@@ -2,6 +2,7 @@ package com.n0tice.api.client.model;
 
 public class Image {
 	
+	private final String id;
 	private final String small;
 	private final String medium;
 	private final String large;
@@ -9,7 +10,8 @@ public class Image {
 	private final String orientation;
 	private final String mediumlandscape;
 	
-	public Image(String small, String medium, String large, String extraLarge, String mediumlandscape, String orientation) {
+	public Image(String id, String small, String medium, String large, String extraLarge, String mediumlandscape, String orientation) {
+		this.id = id;
 		this.small = small;
 		this.medium = medium;
 		this.large = large;
@@ -17,7 +19,11 @@ public class Image {
 		this.mediumlandscape = mediumlandscape;		
 		this.orientation = orientation;
 	}
-
+	
+	public String getId() {
+		return id;
+	}
+	
 	public String getSmall() {
 		return small;
 	}
@@ -44,9 +50,10 @@ public class Image {
 
 	@Override
 	public String toString() {
-		return "Image [extraLarge=" + extraLarge + ", large=" + large
-				+ ", medium=" + medium + ", mediumlandscape=" + mediumlandscape
-				+ ", orientation=" + orientation + ", small=" + small + "]";
+		return "Image [id=" + id + ", small=" + small + ", medium=" + medium
+				+ ", large=" + large + ", extraLarge=" + extraLarge
+				+ ", orientation=" + orientation + ", mediumlandscape="
+				+ mediumlandscape + "]";
 	}
 	
 }

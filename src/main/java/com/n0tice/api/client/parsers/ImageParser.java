@@ -7,6 +7,7 @@ import com.n0tice.api.client.model.Image;
 
 public class ImageParser {
 	
+	private static final String ID = "id";
 	private static final String SMALL = "small";
 	private static final String MEDIUM = "medium";
 	private static final String MEDIUMLANDSCAPE = "mediumlandscape";
@@ -16,6 +17,7 @@ public class ImageParser {
 	
 	public Image parseImage(JSONObject imageJson) throws JSONException {
 		return new Image(
+				imageJson.has(ID) ? imageJson.getString(ID) : null,
 				imageJson.has(SMALL) ? imageJson.getString(SMALL) : null,
 				imageJson.has(MEDIUM) ? imageJson.getString(MEDIUM) : null,
 				imageJson.has(LARGE) ? imageJson.getString(LARGE) : null,

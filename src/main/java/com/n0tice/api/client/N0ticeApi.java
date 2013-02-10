@@ -164,7 +164,7 @@ public class N0ticeApi {
 	}
 	
 	public Map<String, Map<String, String>> imageExif(String id) throws NotFoundException, AuthorisationException, BadRequestException, NotAllowedException, N0ticeException {
-		final OAuthRequest request = new OAuthRequest(Verb.GET, urlBuilder.get("image/" + id));
+		final OAuthRequest request = new OAuthRequest(Verb.GET, urlBuilder.get("image/" + id + "/exif"));
 		oauthSignRequest(request);
 
 		final Response response = request.send();
