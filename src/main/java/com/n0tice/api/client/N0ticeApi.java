@@ -219,7 +219,7 @@ public class N0ticeApi {
 		return postReport(headline, latitude, longitude, body, link, image, video, noticeboard, null);		
 	}
 	
-	public Noticeboard createNoticeboard(String domain, String name, String description, boolean moderated, Date endDate, Set<MediaType> supportedMediaTypes, String group) throws NotFoundException, NotAllowedException, AuthorisationException, BadRequestException, ParsingException, IOException, N0ticeException {
+	public Noticeboard createNoticeboard(String domain, String name, String description, boolean moderated, Date endDate, Set<MediaType> supportedMediaTypes, String group, MediaFile cover) throws NotFoundException, NotAllowedException, AuthorisationException, BadRequestException, ParsingException, IOException, N0ticeException {
 		OAuthRequest request = new OAuthRequest(Verb.POST, apiUrl + "/noticeboards/new");
 		MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
 		addEntityPartParameter(entity, "domain", domain);
@@ -229,6 +229,9 @@ public class N0ticeApi {
 	
 		if (endDate != null) {
 			addEntityPartParameter(entity, "endDate", ISODateTimeFormat.dateTimeNoMillis().print(new DateTime(endDate)));
+		}
+		if (cover != null) {
+			entity.addPart("cover", new ByteArrayBody(cover.getData(), cover.getFilename()));
 		}
 		
 		StringBuilder supportedMediaTypesValue = new StringBuilder();
