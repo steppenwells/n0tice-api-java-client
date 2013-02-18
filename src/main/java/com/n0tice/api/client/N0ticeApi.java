@@ -452,7 +452,7 @@ public class N0ticeApi {
 		throw new N0ticeException(response.getBody());
 	}
 	
-	public List<String> moderationActions() throws NotFoundException, HttpFetchException, JSONException {
+	public List<String> moderationActions() throws NotFoundException, HttpFetchException, ParsingException {
 		return moderationComplaintParser.parseModerationActions(httpFetcher.fetchContent(urlBuilder.moderationActions(), UTF_8));
 	}
 	

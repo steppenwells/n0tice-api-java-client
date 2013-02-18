@@ -40,13 +40,17 @@ public class ModerationComplaintParser {
 		return complaints;
 	}
 	
-	public List<String> parseModerationActions(String json) throws JSONException {		
+	public List<String> parseModerationActions(String json) throws ParsingException {		
 		final List<String> actions = Lists.newArrayList();
-		JSONArray actionsJSON = new JSONArray(json);
-		for (int i = 0; i < actionsJSON.length(); i++) {
-			actions.add((String) actionsJSON.get(i));
-		}	
-		return actions;
+		try {
+			JSONArray actionsJSON = new JSONArray(json);
+			for (int i = 0; i < actionsJSON.length(); i++) {
+				actions.add((String) actionsJSON.get(i));
+			}	
+			return actions;
+		} catch (JSONException e) {
+			throw new ParsingException();
+		}
 	}
 
 	private DateTime parseDate(String dateString) {
