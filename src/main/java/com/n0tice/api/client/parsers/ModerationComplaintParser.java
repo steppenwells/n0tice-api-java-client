@@ -39,6 +39,15 @@ public class ModerationComplaintParser {
 		}
 		return complaints;
 	}
+	
+	public List<String> parseModerationActions(String json) throws JSONException {		
+		final List<String> actions = Lists.newArrayList();
+		JSONArray actionsJSON = new JSONArray(json);
+		for (int i = 0; i < actionsJSON.length(); i++) {
+			actions.add((String) actionsJSON.get(i));
+		}	
+		return actions;
+	}
 
 	private DateTime parseDate(String dateString) {
 		return dateFormatter.parseDateTime(dateString);
