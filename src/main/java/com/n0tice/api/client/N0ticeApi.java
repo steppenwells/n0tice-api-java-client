@@ -452,7 +452,7 @@ public class N0ticeApi {
 	}
 	
 	public boolean approve(String id, String notes) throws NotFoundException, NotAllowedException, AuthorisationException, BadRequestException, N0ticeException {
-		OAuthRequest request = new OAuthRequest(Verb.POST, apiUrl + "/" + id + "/approve");
+		OAuthRequest request = new OAuthRequest(Verb.POST, apiUrl + "/" + id + "/moderate/approve");
 		addBodyParameter(request, "notes", notes);
 		oauthSignRequest(request);
 		
@@ -466,7 +466,7 @@ public class N0ticeApi {
 	}
 	
 	public boolean defer(String id, String notes) throws NotFoundException, NotAllowedException, AuthorisationException, BadRequestException, N0ticeException {
-		OAuthRequest request = new OAuthRequest(Verb.POST, apiUrl + "/" + id + "/defer");
+		OAuthRequest request = new OAuthRequest(Verb.POST, apiUrl + "/" + id + "/moderate/defer");
 		addBodyParameter(request, "notes", notes);
 		oauthSignRequest(request);
 		
@@ -480,7 +480,7 @@ public class N0ticeApi {
 	}
 	
 	public boolean reject(String id, String notes) throws NotFoundException, NotAllowedException, AuthorisationException, BadRequestException, N0ticeException {
-		OAuthRequest request = new OAuthRequest(Verb.POST, apiUrl + "/" + id + "/reject");
+		OAuthRequest request = new OAuthRequest(Verb.POST, apiUrl + "/" + id + "/moderate/reject");
 		addBodyParameter(request, "notes", notes);
 		oauthSignRequest(request);
 		
