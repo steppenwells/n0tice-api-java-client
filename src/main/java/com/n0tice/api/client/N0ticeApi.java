@@ -456,36 +456,8 @@ public class N0ticeApi {
 		return moderationComplaintParser.parseModerationActions(httpFetcher.fetchContent(urlBuilder.moderationActions(), UTF_8));
 	}
 	
-	public boolean approve(String id, String notes) throws NotFoundException, NotAllowedException, AuthorisationException, BadRequestException, N0ticeException {
-		OAuthRequest request = new OAuthRequest(Verb.POST, apiUrl + "/" + id + "/moderate/approve");
-		addBodyParameter(request, "notes", notes);
-		oauthSignRequest(request);
-		
-		final Response response = request.send();		
-		if (response.getCode() == 200) {
-	    	return true;
-		}
-
-		handleExceptions(response);
-		throw new N0ticeException(response.getBody());
-	}
-	
-	public boolean defer(String id, String notes) throws NotFoundException, NotAllowedException, AuthorisationException, BadRequestException, N0ticeException {
-		OAuthRequest request = new OAuthRequest(Verb.POST, apiUrl + "/" + id + "/moderate/defer");
-		addBodyParameter(request, "notes", notes);
-		oauthSignRequest(request);
-		
-		final Response response = request.send();		
-		if (response.getCode() == 200) {
-	    	return true;
-		}
-
-		handleExceptions(response);
-		throw new N0ticeException(response.getBody());
-	}
-	
-	public boolean reject(String id, String notes) throws NotFoundException, NotAllowedException, AuthorisationException, BadRequestException, N0ticeException {
-		OAuthRequest request = new OAuthRequest(Verb.POST, apiUrl + "/" + id + "/moderate/reject");
+	public boolean moderate(String id, String notes, String action) throws NotFoundException, NotAllowedException, AuthorisationException, BadRequestException, N0ticeException {
+		OAuthRequest request = new OAuthRequest(Verb.POST, apiUrl + "/" + id + "/moderate/" + action);
 		addBodyParameter(request, "notes", notes);
 		oauthSignRequest(request);
 		
