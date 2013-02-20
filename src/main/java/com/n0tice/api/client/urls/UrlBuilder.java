@@ -56,6 +56,10 @@ public class UrlBuilder {
 		return apiUrl + "/moderation/actions";
 	}
 	
+	public String moderationStates() {
+		return apiUrl + "/moderation/states";
+	}
+	
 	private String urlEncode(String value) {
 		try {
 			return URLEncoder.encode(value, UTF_8);

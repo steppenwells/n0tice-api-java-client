@@ -28,7 +28,6 @@ import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
-import org.json.JSONException;
 import org.scribe.builder.ServiceBuilder;
 import org.scribe.model.OAuthRequest;
 import org.scribe.model.Response;
@@ -454,6 +453,10 @@ public class N0ticeApi {
 	
 	public List<String> moderationActions() throws NotFoundException, HttpFetchException, ParsingException {
 		return moderationComplaintParser.parseModerationActions(httpFetcher.fetchContent(urlBuilder.moderationActions(), UTF_8));
+	}
+	
+	public List<String> moderationStates() throws NotFoundException, HttpFetchException, ParsingException {
+		return moderationComplaintParser.parseModerationActions(httpFetcher.fetchContent(urlBuilder.moderationStates(), UTF_8));
 	}
 	
 	public boolean moderate(String id, String notes, String action) throws NotFoundException, NotAllowedException, AuthorisationException, BadRequestException, N0ticeException {
