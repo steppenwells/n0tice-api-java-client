@@ -135,4 +135,9 @@ public class SearchUrlBuilderTest {
 		assertEquals("http://api.local/search?order=someway", builder.toUrl(new SearchQuery().order("someway")));
 	}
 	
+	@Test
+	public void canSpecifyNoticeboardOwner() throws Exception {
+		assertEquals("http://api.local/search?noticeboardOwnedBy=someone", builder.toUrl(new SearchQuery().noticeBoardOwnedBy("someone")));
+	}
+	
 }

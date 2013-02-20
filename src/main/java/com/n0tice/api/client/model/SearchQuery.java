@@ -28,6 +28,7 @@ public class SearchQuery {
 	private Boolean awaitingModeration;
 	private String moderationStatus;
 	private String order;
+	private String noticeBoardOwnedBy;
 	
 	public SearchQuery q(String q) {
 		this.q = q;
@@ -100,6 +101,11 @@ public class SearchQuery {
 	
 	public SearchQuery noticeBoard(String noticeBoard) {
 		noticeBoards.add(noticeBoard);
+		return this;
+	}
+	
+	public SearchQuery noticeBoardOwnedBy(String noticeBoardOwnedBy) {
+		this.noticeBoardOwnedBy = noticeBoardOwnedBy;
 		return this;
 	}
 	
@@ -217,20 +223,24 @@ public class SearchQuery {
 	public String getOrder() {
 		return order;
 	}
-
+	
+	public String getNoticeBoardOwnedBy() {
+		return noticeBoardOwnedBy;
+	}
+	
 	@Override
 	public String toString() {
-		return "SearchQuery [awaitingModeration=" + awaitingModeration
-				+ ", country=" + country + ", endingAfter=" + endingAfter
-				+ ", hasImages=" + hasImages + ", latitude=" + latitude
-				+ ", limit=" + limit + ", location=" + location
-				+ ", longitude=" + longitude + ", maximumFlags=" + maximumFlags
-				+ ", minimumFlags=" + minimumFlags + ", moderationStatus="
-				+ moderationStatus + ", noticeBoards=" + noticeBoards
-				+ ", order=" + order + ", page=" + page + ", q=" + q
-				+ ", radius=" + radius + ", startingAfter=" + startingAfter
-				+ ", tags=" + tags + ", type=" + type + ", user=" + user
-				+ ", via=" + via + "]";
+		return "SearchQuery [q=" + q + ", page=" + page + ", limit=" + limit
+				+ ", tags=" + tags + ", type=" + type + ", noticeBoards="
+				+ noticeBoards + ", location=" + location + ", user=" + user
+				+ ", latitude=" + latitude + ", longitude=" + longitude
+				+ ", radius=" + radius + ", country=" + country + ", via="
+				+ via + ", maximumFlags=" + maximumFlags + ", minimumFlags="
+				+ minimumFlags + ", startingAfter=" + startingAfter
+				+ ", endingAfter=" + endingAfter + ", hasImages=" + hasImages
+				+ ", awaitingModeration=" + awaitingModeration
+				+ ", moderationStatus=" + moderationStatus + ", order=" + order
+				+ ", noticeBoardOwnedBy=" + noticeBoardOwnedBy + "]";
 	}
 	
 }

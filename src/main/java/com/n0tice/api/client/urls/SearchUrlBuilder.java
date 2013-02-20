@@ -33,10 +33,12 @@ public class SearchUrlBuilder {
 		}
 		if (searchQuery.getType() != null) {
 			url.appendParameter("type", searchQuery.getType());		
-
 		}
 		if (!searchQuery.getNoticeBoards().isEmpty()) {
 			url.appendParameter("noticeboard", COMMA_JOINER.join(searchQuery.getNoticeBoards()));
+		}
+		if (searchQuery.getNoticeBoardOwnedBy() != null) {
+			url.appendParameter("noticeboardOwnedBy", searchQuery.getNoticeBoardOwnedBy());
 		}
 		if (!searchQuery.getTags().isEmpty()) {
 			url.appendParameter("tags", COMMA_JOINER.join(searchQuery.getTags()));
