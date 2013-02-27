@@ -146,6 +146,19 @@ public class N0ticeApi {
 		throw new N0ticeException(response.getBody());		
 	}
 	
+	public List<String> getReposts(String id) throws NotFoundException, AuthorisationException, BadRequestException, NotAllowedException, N0ticeException {
+		final OAuthRequest request = new OAuthRequest(Verb.GET, urlBuilder.get(id) + "/reposts");
+		oauthSignRequest(request);
+		
+		final Response response = request.send();
+		if (response.getCode() == 200) {
+			return searchParser.parseReposts(response.getBody());
+		}
+		
+		handleExceptions(response);
+		throw new N0ticeException(response.getBody());		
+	}
+	
 	public Update getUpdate(String id) throws HttpFetchException, NotFoundException, ParsingException {
 		return searchParser.parseUpdate(httpFetcher.fetchContent(urlBuilder.get(id), UTF_8));
 	}

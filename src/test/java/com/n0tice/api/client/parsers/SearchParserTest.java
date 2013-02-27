@@ -2,6 +2,8 @@ package com.n0tice.api.client.parsers;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.List;
+
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.junit.Before;
@@ -17,6 +19,14 @@ public class SearchParserTest {
 	@Before
 	public void setup() {
 		searchParser = new SearchParser();
+	}
+	
+	@Test
+	public void canParseNoticeboardsFromRepostEndpoint() throws Exception {
+		final List<String> results = searchParser.parseReposts(ContentLoader.loadContent("reposts.json"));
+		
+		assertEquals(1, results.size());
+		assertEquals("testnoticeboard1360800903424", results.get(0));
 	}
 	
 	@Test

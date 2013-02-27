@@ -84,6 +84,22 @@ public class SearchParser {
 		
 		return null;
 	}
+	
+	public List<String> parseReposts(String json) throws ParsingException {
+		try {
+			final List<String> noticeboards = new ArrayList<String>();
+			JSONArray repostsJSON = new JSONArray(json);		
+			for (int i = 0; i < repostsJSON.length(); i++) {
+				JSONObject repostJSON = repostsJSON.getJSONObject(i);
+				noticeboards.add(repostJSON.getJSONObject("noticeboard").getString("domain"));
+			}
+			return noticeboards;
+			
+		} catch (JSONException e) {
+			e.printStackTrace();
+			throw new ParsingException();
+		}
+	}
 
 	private Content jsonToContentItem(JSONObject contentItemJSON) throws JSONException {
 		User user = null;
