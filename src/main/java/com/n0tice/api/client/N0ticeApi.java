@@ -37,12 +37,10 @@ import org.scribe.oauth.OAuthService;
 
 import com.n0tice.api.client.exceptions.AuthorisationException;
 import com.n0tice.api.client.exceptions.BadRequestException;
-import com.n0tice.api.client.exceptions.HttpFetchException;
 import com.n0tice.api.client.exceptions.MissingCredentialsExeception;
 import com.n0tice.api.client.exceptions.N0ticeException;
 import com.n0tice.api.client.exceptions.NotAllowedException;
 import com.n0tice.api.client.exceptions.NotFoundException;
-import com.n0tice.api.client.exceptions.ParsingException;
 import com.n0tice.api.client.model.AccessToken;
 import com.n0tice.api.client.model.Content;
 import com.n0tice.api.client.model.Group;
@@ -125,15 +123,15 @@ public class N0ticeApi {
 		scribeAccessToken = new Token(accessToken.getToken(), accessToken.getSecret());
 	}
 	
-	public Content get(String id) throws HttpFetchException, NotFoundException, ParsingException {
+	public Content get(String id) throws N0ticeException {
 		return searchParser.parseReport(httpFetcher.fetchContent(urlBuilder.get(id), UTF_8));
 	}
 	
-	public List<HistoryItem> getHistory(String id) throws NotFoundException, ParsingException, HttpFetchException {
+	public List<HistoryItem> getHistory(String id) throws N0ticeException {
 		return historyParser.parse(httpFetcher.fetchContent(urlBuilder.getHistory(id), UTF_8));
 	}
 	
-	public List<ModerationComplaint> getModerationComplains(String id) throws AuthorisationException, BadRequestException, NotAllowedException, N0ticeException {
+	public List<ModerationComplaint> getModerationComplains(String id) throws N0ticeException {
 		final OAuthRequest request = new OAuthRequest(Verb.GET, urlBuilder.get(id) + "/flags");
 		oauthSignRequest(request);
 		
@@ -146,7 +144,7 @@ public class N0ticeApi {
 		throw new N0ticeException(response.getBody());		
 	}
 	
-	public List<String> getReposts(String id) throws NotFoundException, AuthorisationException, BadRequestException, NotAllowedException, N0ticeException {
+	public List<String> getReposts(String id) throws N0ticeException {
 		final OAuthRequest request = new OAuthRequest(Verb.GET, urlBuilder.get(id) + "/reposts");
 		oauthSignRequest(request);
 		
@@ -159,11 +157,11 @@ public class N0ticeApi {
 		throw new N0ticeException(response.getBody());		
 	}
 	
-	public Update getUpdate(String id) throws HttpFetchException, NotFoundException, ParsingException {
+	public Update getUpdate(String id) throws N0ticeException {
 		return searchParser.parseUpdate(httpFetcher.fetchContent(urlBuilder.get(id), UTF_8));
 	}
 	
-	public Content authedGet(String id) throws HttpFetchException, NotFoundException, ParsingException, N0ticeException, NotAllowedException {		
+	public Content authedGet(String id) throws N0ticeException {		
 		final OAuthRequest request = new OAuthRequest(Verb.GET, urlBuilder.get(id));
 		oauthSignRequest(request);
 		
@@ -176,7 +174,7 @@ public class N0ticeApi {
 		throw new N0ticeException(response.getBody());
 	}
 	
-	public Map<String, Map<String, String>> imageExif(String id) throws NotFoundException, AuthorisationException, BadRequestException, NotAllowedException, N0ticeException {
+	public Map<String, Map<String, String>> imageExif(String id) throws N0ticeException {
 		final OAuthRequest request = new OAuthRequest(Verb.GET, urlBuilder.get("image/" + id + "/exif"));
 		oauthSignRequest(request);
 
@@ -189,31 +187,31 @@ public class N0ticeApi {
 		throw new N0ticeException(response.getBody());
 	}
 	
-	public ResultSet search(SearchQuery searchQuery) throws ParsingException, HttpFetchException {
+	public ResultSet search(SearchQuery searchQuery) throws N0ticeException {
 		return searchParser.parseSearchResults(httpFetcher.fetchContent(searchUrlBuilder.toUrl(searchQuery), UTF_8));
 	}
 	
-	public User user(String username) throws NotFoundException, ParsingException, HttpFetchException {
+	public User user(String username) throws N0ticeException {
 		return userParser.parseUserProfile(httpFetcher.fetchContent(urlBuilder.userProfile(username), UTF_8));
 	}
 	
-	public List<User> followedUsers(String username) throws NotFoundException, ParsingException, HttpFetchException {
+	public List<User> followedUsers(String username) throws N0ticeException {
 		return userParser.parseUserProfiles(httpFetcher.fetchContent(urlBuilder.userFollowedUsers(username), UTF_8));
 	}
 	
-	public List<Noticeboard> followedNoticeboards(String username) throws NotFoundException, ParsingException, HttpFetchException {
+	public List<Noticeboard> followedNoticeboards(String username) throws N0ticeException {
 		return noticeboardParser.parseNoticeboards(httpFetcher.fetchContent(urlBuilder.userFollowedNoticeboards(username), UTF_8));
 	}
 	
-	public List<Noticeboard> noticeboards(String username) throws NotFoundException, ParsingException, HttpFetchException {
+	public List<Noticeboard> noticeboards(String username) throws N0ticeException {
 		return noticeboardParser.parseNoticeboards(httpFetcher.fetchContent(urlBuilder.userNoticeboards(username), UTF_8));
 	}
 	
-	public Noticeboard noticeBoard(String noticeboard) throws NotFoundException, ParsingException, HttpFetchException {
+	public Noticeboard noticeBoard(String noticeboard) throws N0ticeException {
 		return noticeboardParser.parseNoticeboardResult(httpFetcher.fetchContent(urlBuilder.noticeBoard(noticeboard), UTF_8));
 	}
 	
-	public User verify() throws ParsingException, AuthorisationException, IOException, NotAllowedException, NotFoundException, BadRequestException, N0ticeException {
+	public User verify() throws N0ticeException {
 		OAuthRequest request = new OAuthRequest(Verb.GET, apiUrl + "/verify");	// TODO most be a POST
 		oauthSignRequest(request);
 		
@@ -228,11 +226,11 @@ public class N0ticeApi {
 		throw new N0ticeException(response.getBody());
 	}
 	
-	public Content postReport(String headline, Double latitude, Double longitude, String body, String link, MediaFile image, VideoAttachment video, String noticeboard) throws ParsingException, AuthorisationException, IOException, NotAllowedException, NotFoundException, BadRequestException, N0ticeException {
+	public Content postReport(String headline, Double latitude, Double longitude, String body, String link, MediaFile image, VideoAttachment video, String noticeboard) throws N0ticeException {
 		return postReport(headline, latitude, longitude, body, link, image, video, noticeboard, null);		
 	}
 	
-	public Noticeboard createNoticeboard(String domain, String name, String description, boolean moderated, Date endDate, Set<MediaType> supportedMediaTypes, String group, MediaFile cover) throws NotFoundException, NotAllowedException, AuthorisationException, BadRequestException, ParsingException, IOException, N0ticeException {
+	public Noticeboard createNoticeboard(String domain, String name, String description, boolean moderated, Date endDate, Set<MediaType> supportedMediaTypes, String group, MediaFile cover) throws N0ticeException {
 		OAuthRequest request = new OAuthRequest(Verb.POST, apiUrl + "/noticeboards/new");
 		MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
 		addEntityPartParameter(entity, "domain", domain);
@@ -262,7 +260,7 @@ public class N0ticeApi {
 		}
 		
 		request.addHeader("Content-Type", entity.getContentType().getValue());
-		request.addPayload(extractMultpartBytes(entity));
+		addMultipartEntity(request, entity);
 		oauthSignRequest(request);
 		
 		Response response = request.send();
@@ -276,7 +274,7 @@ public class N0ticeApi {
 		throw new N0ticeException(response.getBody());
 	}
 	
-	public void closeNoticeboard(String domain) throws NotFoundException, AuthorisationException, BadRequestException, NotAllowedException, N0ticeException {
+	public void closeNoticeboard(String domain) throws N0ticeException {
 		OAuthRequest request = new OAuthRequest(Verb.POST, urlBuilder.closeNoticeboard(domain));
 		oauthSignRequest(request);
 		
@@ -289,13 +287,13 @@ public class N0ticeApi {
 		throw new N0ticeException(response.getBody());
 	}
 	
-	public Group createGroup(String name) throws IOException, ParsingException, NotFoundException, NotAllowedException, AuthorisationException, BadRequestException, N0ticeException {
+	public Group createGroup(String name) throws N0ticeException {
 		OAuthRequest request = new OAuthRequest(Verb.POST, apiUrl + "/groups/new");
 		MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
 		addEntityPartParameter(entity, "name", name);
 		
 		request.addHeader("Content-Type", entity.getContentType().getValue());
-		request.addPayload(extractMultpartBytes(entity));
+		addMultipartEntity(request, entity);
 		oauthSignRequest(request);
 		
 		Response response = request.send();
@@ -309,29 +307,29 @@ public class N0ticeApi {
 		throw new N0ticeException(response.getBody());
 	}
 	
-	public Content postReport(String headline, Double latitude, Double longitude, String body, String link, MediaFile image, VideoAttachment video, String noticeboard, DateTime date) throws ParsingException, AuthorisationException, IOException, NotAllowedException, NotFoundException, BadRequestException, N0ticeException {
+	public Content postReport(String headline, Double latitude, Double longitude, String body, String link, MediaFile image, VideoAttachment video, String noticeboard, DateTime date) throws N0ticeException {
 		OAuthRequest request = new OAuthRequest(Verb.POST, apiUrl + "/report/new");
 		MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
 		if (headline != null) {
-			entity.addPart("headline", new StringBody(headline, Charset.forName(UTF_8)));
+			addStringPart(entity, "headline", headline);
 		}
 		if (noticeboard != null) {
-			entity.addPart("noticeboard", new StringBody(noticeboard, Charset.forName(UTF_8)));
+			addStringPart(entity, "noticeboard", noticeboard);
 		}
 
-		if (latitude != null && longitude != null) {
-			entity.addPart("latitude", new StringBody(Double.toString(latitude), Charset.forName(UTF_8)));
-			entity.addPart("longitude", new StringBody(Double.toString(longitude), Charset.forName(UTF_8)));
+		if (latitude != null && longitude != null) {			
+			addStringPart(entity, "latitude", Double.toString(latitude));
+			addStringPart(entity, "longitude", Double.toString(longitude));						
 		}
 		
 		populateUpdateFields(body, link, image, video, entity);
 		
 		if (date != null) {
-			entity.addPart("date", new StringBody(date.toString(ZULE_TIME_FORMAT), Charset.forName(UTF_8)));
+			addStringPart(entity, "date", date.toString(ZULE_TIME_FORMAT));
 		}
 		
 		request.addHeader("Content-Type", entity.getContentType().getValue());
-		request.addPayload(extractMultpartBytes(entity));
+		addMultipartEntity(request, entity);
 		oauthSignRequest(request);
 		
 		Response response = request.send();
@@ -344,8 +342,8 @@ public class N0ticeApi {
 		handleExceptions(response);
 		throw new N0ticeException(response.getBody());
 	}
-
-	public ResultSet authedSearch(SearchQuery searchQuery) throws ParsingException, HttpFetchException, NotAllowedException, AuthorisationException, BadRequestException, N0ticeException {				
+	
+	public ResultSet authedSearch(SearchQuery searchQuery) throws N0ticeException {				
 		OAuthRequest request = new OAuthRequest(Verb.GET, searchUrlBuilder.toUrl(searchQuery));
 		oauthSignRequest(request);
 		
@@ -362,9 +360,7 @@ public class N0ticeApi {
 	
 	public Content postEvent(String headline, double latitude,
 			double longitude, String body, String link, MediaFile image, VideoAttachment video,
-			String noticeboard, LocalDateTime startDate, LocalDateTime endDate, Reoccurence reoccurence, LocalDateTime reoccursTo)
-			throws ParsingException, AuthorisationException, IOException,
-			NotAllowedException, NotFoundException, BadRequestException, N0ticeException {		
+			String noticeboard, LocalDateTime startDate, LocalDateTime endDate, Reoccurence reoccurence, LocalDateTime reoccursTo) throws N0ticeException {		
 		final OAuthRequest request = new OAuthRequest(Verb.POST, apiUrl + "/event/new");
 
 		final MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
@@ -382,7 +378,7 @@ public class N0ticeApi {
 		}
 		
 		request.addHeader("Content-Type", entity.getContentType().getValue());
-		request.addPayload(extractMultpartBytes(entity));
+		addMultipartEntity(request, entity);
 		oauthSignRequest(request);
 		
 		Response response = request.send();
@@ -396,13 +392,13 @@ public class N0ticeApi {
 		throw new N0ticeException(response.getBody());
 	}
 	
-	public Update postReportUpdate(String reportId, String body, String link, MediaFile image, VideoAttachment video) throws IOException, AuthorisationException, NotFoundException, NotAllowedException, BadRequestException, N0ticeException {
+	public Update postReportUpdate(String reportId, String body, String link, MediaFile image, VideoAttachment video) throws N0ticeException {
 		OAuthRequest request = new OAuthRequest(Verb.POST, apiUrl + "/" + reportId  + "/update/new");
 		MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
 		populateUpdateFields(body, link, image, video, entity);
 
 		request.addHeader("Content-Type", entity.getContentType().getValue());
-		request.addPayload(extractMultpartBytes(entity));
+		addMultipartEntity(request, entity);
 		oauthSignRequest(request);
 		
 		final Response response = request.send();
@@ -415,7 +411,7 @@ public class N0ticeApi {
 		throw new N0ticeException(response.getBody());
 	}
 	
-	public boolean voteInteresting(String id) throws NotFoundException, AuthorisationException, NotAllowedException, BadRequestException, N0ticeException {
+	public boolean voteInteresting(String id) throws N0ticeException {
 		OAuthRequest request = new OAuthRequest(Verb.POST, apiUrl + "/" + id + "/vote/interesting");	
 		oauthSignRequest(request);
 		
@@ -428,7 +424,7 @@ public class N0ticeApi {
 		throw new N0ticeException(response.getBody());
 	}
 	
-	public boolean flagAsInappropriate(String id, ModerationComplaintType type, String notes, String email) throws NotFoundException, AuthorisationException, NotAllowedException, BadRequestException, N0ticeException {
+	public boolean flagAsInappropriate(String id, ModerationComplaintType type, String notes, String email) throws N0ticeException {
 		final OAuthRequest request = new OAuthRequest(Verb.POST, apiUrl + "/" + id + "/flag");
 		if (type != null) {
 			addBodyParameter(request, "type", type.toString());
@@ -450,7 +446,7 @@ public class N0ticeApi {
 		throw new N0ticeException(response.getBody());
 	}
 	
-	public boolean repost(String id, String noticeboard) throws NotFoundException, NotAllowedException, AuthorisationException, BadRequestException, N0ticeException {
+	public boolean repost(String id, String noticeboard) throws N0ticeException {
 		OAuthRequest request = new OAuthRequest(Verb.POST, apiUrl + "/" + id + "/repost");
 		addBodyParameter(request, "noticeboard", noticeboard);
 		oauthSignRequest(request);
@@ -464,15 +460,15 @@ public class N0ticeApi {
 		throw new N0ticeException(response.getBody());
 	}
 	
-	public List<String> moderationActions() throws NotFoundException, HttpFetchException, ParsingException {
+	public List<String> moderationActions() throws N0ticeException {
 		return moderationComplaintParser.parseModerationActions(httpFetcher.fetchContent(urlBuilder.moderationActions(), UTF_8));
 	}
 	
-	public List<String> moderationStates() throws NotFoundException, HttpFetchException, ParsingException {
+	public List<String> moderationStates() throws N0ticeException {
 		return moderationComplaintParser.parseModerationActions(httpFetcher.fetchContent(urlBuilder.moderationStates(), UTF_8));
 	}
 	
-	public boolean moderate(String id, String notes, String action) throws NotFoundException, NotAllowedException, AuthorisationException, BadRequestException, N0ticeException {
+	public boolean moderate(String id, String notes, String action) throws N0ticeException {
 		OAuthRequest request = new OAuthRequest(Verb.POST, apiUrl + "/" + id + "/moderate/" + action);
 		addBodyParameter(request, "notes", notes);
 		oauthSignRequest(request);
@@ -486,7 +482,7 @@ public class N0ticeApi {
 		throw new N0ticeException(response.getBody());
 	}
 	
-	public int interestingVotes(String id) throws NotFoundException, ParsingException, NotAllowedException, AuthorisationException, BadRequestException, N0ticeException {
+	public int interestingVotes(String id) throws N0ticeException {
 		OAuthRequest request = new OAuthRequest(Verb.GET, apiUrl + "/" + id + "/votes/interesting");	
 			
 		final Response response = request.send();
@@ -499,7 +495,7 @@ public class N0ticeApi {
 		throw new N0ticeException(response.getBody());
 	}
 	
-	public List<String> notifications(String username) throws NotFoundException, ParsingException, NotAllowedException, AuthorisationException, BadRequestException, N0ticeException {		
+	public List<String> notifications(String username) throws N0ticeException {		
 		OAuthRequest request = new OAuthRequest(Verb.GET, urlBuilder.userNotifications(username));
 		oauthSignRequest(request);
 		
@@ -513,7 +509,7 @@ public class N0ticeApi {
 		throw new N0ticeException(response.getBody());
 	}
 	
-	public Content updateReport(String id, String headline, String body) throws ParsingException, AuthorisationException, NotFoundException, NotAllowedException, BadRequestException, N0ticeException {	
+	public Content updateReport(String id, String headline, String body) throws N0ticeException {	
 		OAuthRequest request = new OAuthRequest(Verb.POST, apiUrl + "/" + id);	
 		addBodyParameter(request, "headline", headline);
 		oauthSignRequest(request);
@@ -529,7 +525,7 @@ public class N0ticeApi {
 		throw new N0ticeException(response.getBody());
 	}
 	
-	public boolean followUser(String username) throws NotFoundException, AuthorisationException, NotAllowedException, BadRequestException, N0ticeException {
+	public boolean followUser(String username) throws N0ticeException {
 		OAuthRequest request = new OAuthRequest(Verb.POST, apiUrl + "/user/" + username + "/follow");	
 		oauthSignRequest(request);
 		
@@ -543,7 +539,7 @@ public class N0ticeApi {
 		throw new N0ticeException(response.getBody());
 	}
 	
-	public boolean unfollowUser(String username) throws NotFoundException, AuthorisationException, NotAllowedException, BadRequestException, N0ticeException {
+	public boolean unfollowUser(String username) throws N0ticeException {
 		OAuthRequest request = new OAuthRequest(Verb.POST, apiUrl + "/user/" + username + "/unfollow");	
 		oauthSignRequest(request);
 		
@@ -557,7 +553,7 @@ public class N0ticeApi {
 		throw new N0ticeException(response.getBody());
 	}
 	
-	public boolean followNoticeboard(String noticeboard) throws NotFoundException, AuthorisationException, NotAllowedException, BadRequestException, N0ticeException {
+	public boolean followNoticeboard(String noticeboard) throws N0ticeException {
 		OAuthRequest request = new OAuthRequest(Verb.POST, apiUrl + "/noticeboard/" + noticeboard + "/follow");	
 		oauthSignRequest(request);
 		
@@ -571,7 +567,7 @@ public class N0ticeApi {
 		throw new N0ticeException(response.getBody());
 	}
 	
-	public boolean unfollowNoticeboard(String noticeboard) throws NotFoundException, AuthorisationException, NotAllowedException, BadRequestException, N0ticeException {
+	public boolean unfollowNoticeboard(String noticeboard) throws N0ticeException {
 		OAuthRequest request = new OAuthRequest(Verb.POST, apiUrl + "/noticeboard/" + noticeboard + "/unfollow");	
 		oauthSignRequest(request);
 		
@@ -585,7 +581,7 @@ public class N0ticeApi {
 		throw new N0ticeException(response.getBody());
 	}
 	
-	public NewUserResponse createUser(String consumerKey, String username, String password, String email) throws ParsingException, NotFoundException, NotAllowedException, AuthorisationException, BadRequestException, N0ticeException {
+	public NewUserResponse createUser(String consumerKey, String username, String password, String email) throws N0ticeException {
 		OAuthRequest request = new OAuthRequest(Verb.POST, apiUrl + "/user/new");		
 		addBodyParameter(request, "consumerkey", consumerKey);
 		addBodyParameter(request, "username", username);
@@ -603,7 +599,7 @@ public class N0ticeApi {
 		throw new N0ticeException(response.getBody());
 	}
 	
-	public AccessToken authUser(String consumerKey, String username, String password, String consumerSecret) throws ParsingException, NotFoundException, NotAllowedException, AuthorisationException, BadRequestException, InvalidKeyException, UnsupportedEncodingException, NoSuchAlgorithmException, N0ticeException {
+	public AccessToken authUser(String consumerKey, String username, String password, String consumerSecret) throws N0ticeException {
 		log.info("Attempting to auth user: " + consumerKey + ", " + username + ", " + password + ", " + consumerSecret);
 		OAuthRequest request = new OAuthRequest(Verb.POST, apiUrl + "/user/auth");
 		addBodyParameter(request, "consumerkey", consumerKey);
@@ -627,7 +623,7 @@ public class N0ticeApi {
 		throw new N0ticeException(response.getBody());
 	}
 	
-	public AccessToken authGuardianUser(String consumerKey, String token, String consumerSecret) throws ParsingException, NotFoundException, NotAllowedException, AuthorisationException, BadRequestException, InvalidKeyException, UnsupportedEncodingException, NoSuchAlgorithmException, N0ticeException {
+	public AccessToken authGuardianUser(String consumerKey, String token, String consumerSecret) throws N0ticeException {
 		log.info("Attempting to auth guardian user: " + consumerKey + ", " + token);
 		final OAuthRequest request = new OAuthRequest(Verb.POST, apiUrl + "/user/auth");
 		addBodyParameter(request, "consumerkey", consumerKey);
@@ -650,7 +646,7 @@ public class N0ticeApi {
 		throw new N0ticeException(response.getBody());
 	}
 	
-	public AccessToken authGuardianCookie(String consumerKey, String cookie, String consumerSecret) throws ParsingException, NotFoundException, NotAllowedException, AuthorisationException, BadRequestException, InvalidKeyException, UnsupportedEncodingException, NoSuchAlgorithmException, N0ticeException {
+	public AccessToken authGuardianCookie(String consumerKey, String cookie, String consumerSecret) throws N0ticeException {
 		final OAuthRequest request = new OAuthRequest(Verb.POST, apiUrl + "/user/auth");
 		addBodyParameter(request, "consumerkey", consumerKey);
 		addBodyParameter(request, "guardianCookie", cookie);
@@ -672,20 +668,21 @@ public class N0ticeApi {
 		throw new N0ticeException(response.getBody());
 	}
 	
-	public User updateUserDetails(String username, String displayName, String bio, MediaFile image) throws ParsingException, IOException, NotFoundException, NotAllowedException, AuthorisationException, BadRequestException, N0ticeException {
+	public User updateUserDetails(String username, String displayName, String bio, MediaFile image) throws N0ticeException {
 		OAuthRequest request = new OAuthRequest(Verb.POST, apiUrl + "/user/" + username);		
 		MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
 		if (displayName != null) {
-			entity.addPart("displayName", new StringBody(displayName, Charset.forName(UTF_8)));
+			addStringPart(entity, "displayName", displayName);
 		}
 		if (bio != null) {
-			entity.addPart("bio", new StringBody(bio, Charset.forName(UTF_8)));
+			addStringPart(entity, "bio", bio);
 		}
 		if (image != null) {
 			entity.addPart("image", new ByteArrayBody(image.getData(), image.getFilename()));
 		}
+		
 		request.addHeader("Content-Type", entity.getContentType().getValue());
-		request.addPayload(extractMultpartBytes(entity));
+		addMultipartEntity(request, entity);
 		oauthSignRequest(request);
 		
 		Response response = request.send();
@@ -699,7 +696,7 @@ public class N0ticeApi {
 		throw new N0ticeException(response.getBody());
 	}
 	
-	public boolean deleteReport(String id) throws NotFoundException, NotAllowedException, AuthorisationException, BadRequestException, N0ticeException {
+	public boolean deleteReport(String id) throws N0ticeException {
 		OAuthRequest request = new OAuthRequest(Verb.DELETE, apiUrl + "/" + id);	
 		oauthSignRequest(request);
 		
@@ -713,14 +710,20 @@ public class N0ticeApi {
 		throw new N0ticeException(response.getBody());
 	}
 	
-	private void populateUpdateFields(String body, String link,
-			MediaFile image, VideoAttachment video, MultipartEntity entity)
-			throws UnsupportedEncodingException {
+	private void populateUpdateFields(String body, String link, MediaFile image, VideoAttachment video, MultipartEntity entity) throws N0ticeException {
 		if (body != null) {
-			entity.addPart("body", new StringBody(body, Charset.forName(UTF_8)));
+			try {
+				entity.addPart("body", new StringBody(body, Charset.forName(UTF_8)));
+			} catch (UnsupportedEncodingException e) {
+				throw new N0ticeException();
+			}
 		}
 		if (link != null) {
-			entity.addPart("link", new StringBody(link, Charset.forName(UTF_8)));
+			try {
+				entity.addPart("link", new StringBody(link, Charset.forName(UTF_8)));
+			} catch (UnsupportedEncodingException e) {
+				throw new N0ticeException();
+			}
 		}
 		if (image != null) {
 			entity.addPart("image", new ByteArrayBody(image.getData(), image.getFilename()));
@@ -737,7 +740,7 @@ public class N0ticeApi {
 		return byteArray;
 	}
 	
-	private void handleExceptions(Response response) throws NotFoundException, NotAllowedException, AuthorisationException, BadRequestException, N0ticeException {
+	private void handleExceptions(Response response) throws N0ticeException {
 		log.error("Exception during n0tice api call: " + response.getCode() + ", " + response.getBody());
 		if (response.getCode() == 404) {
 			throw new NotFoundException("Not found");
@@ -769,6 +772,15 @@ public class N0ticeApi {
 		}
 	}
 	
+	private void addMultipartEntity(OAuthRequest request, MultipartEntity entity) throws N0ticeException {
+		try {
+			request.addPayload(extractMultpartBytes(entity));
+		} catch (IOException e) {			
+			e.printStackTrace();
+			throw new N0ticeException();
+		}
+	}
+	
 	private void oauthSignRequest(OAuthRequest request) throws MissingCredentialsExeception {
 		if (scribeAccessToken != null) {
 			service.signRequest(scribeAccessToken, request);
@@ -777,12 +789,34 @@ public class N0ticeApi {
 		throw new MissingCredentialsExeception();
 	}
 
-	private String sign(String effectiveUrl, String secret) throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException {
-	    SecretKeySpec key = new SecretKeySpec(secret.getBytes(UTF_8), "HmacSHA1");
-	    Mac mac = Mac.getInstance("HmacSHA1");
-	    mac.init(key);
-	    byte[] bytes = mac.doFinal(effectiveUrl.getBytes(UTF_8));
-	    return new String(Base64.encodeBase64(bytes)).replace("\r\n", "");		  
+	private String sign(String effectiveUrl, String secret) throws N0ticeException {
+	    SecretKeySpec key;
+		try {
+			key = new SecretKeySpec(secret.getBytes(UTF_8), "HmacSHA1");
+			Mac mac = Mac.getInstance("HmacSHA1");
+			mac.init(key);
+			byte[] bytes = mac.doFinal(effectiveUrl.getBytes(UTF_8));
+			return new String(Base64.encodeBase64(bytes)).replace("\r\n", "");
+			
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			throw new N0ticeException();
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+			throw new N0ticeException();
+		} catch (InvalidKeyException e) {
+			e.printStackTrace();
+			throw new N0ticeException();
+		}
+	}
+	
+	private void addStringPart(MultipartEntity entity, String parameter, String value) throws N0ticeException {
+		try {
+			entity.addPart(parameter, new StringBody(value, Charset.forName(UTF_8)));
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			throw new N0ticeException();
+		}
 	}
 	
 }
