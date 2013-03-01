@@ -41,6 +41,7 @@ import com.n0tice.api.client.exceptions.MissingCredentialsExeception;
 import com.n0tice.api.client.exceptions.N0ticeException;
 import com.n0tice.api.client.exceptions.NotAllowedException;
 import com.n0tice.api.client.exceptions.NotFoundException;
+import com.n0tice.api.client.exceptions.ParsingException;
 import com.n0tice.api.client.model.AccessToken;
 import com.n0tice.api.client.model.Content;
 import com.n0tice.api.client.model.Group;
@@ -230,48 +231,13 @@ public class N0ticeApi {
 		return postReport(headline, latitude, longitude, body, link, image, video, noticeboard, null);		
 	}
 	
-	public Noticeboard createNoticeboard(String domain, String name, String description, boolean moderated, Date endDate, Set<MediaType> supportedMediaTypes, String group, MediaFile cover) throws N0ticeException {
-		OAuthRequest request = new OAuthRequest(Verb.POST, apiUrl + "/noticeboards/new");
-		MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
-		addEntityPartParameter(entity, "domain", domain);
-		addEntityPartParameter(entity, "name", name);
-		addEntityPartParameter(entity, "description", description);
-		addEntityPartParameter(entity, "moderated", Boolean.toString(moderated));
+	public Noticeboard createNoticeboard(String name, String description, boolean moderated, Date endDate, Set<MediaType> supportedMediaTypes, String group, MediaFile cover) throws N0ticeException {
+		return postNewNoticeboard(null, name, description, moderated, endDate, supportedMediaTypes, group, cover);
+	}
 	
-		if (endDate != null) {
-			addEntityPartParameter(entity, "endDate", ISODateTimeFormat.dateTimeNoMillis().print(new DateTime(endDate)));
-		}
-		if (cover != null) {
-			entity.addPart("cover", new ByteArrayBody(cover.getData(), cover.getFilename()));
-		}
-		
-		StringBuilder supportedMediaTypesValue = new StringBuilder();
-		Iterator<MediaType> supportedMediaTypesIterator = supportedMediaTypes.iterator();
-		while(supportedMediaTypesIterator.hasNext()) {
-			supportedMediaTypesValue.append(supportedMediaTypesIterator.next());
-			if (supportedMediaTypesIterator.hasNext()) {
-				supportedMediaTypesValue.append(COMMA);
-			}
-		}
-		addEntityPartParameter(entity, "supportedMediaTypes", supportedMediaTypesValue.toString());
-		
-		if (group != null) {
-			addEntityPartParameter(entity, "group", group);
-		}
-		
-		request.addHeader("Content-Type", entity.getContentType().getValue());
-		addMultipartEntity(request, entity);
-		oauthSignRequest(request);
-		
-		Response response = request.send();
-		
-		final String responseBody = response.getBody();
-		if (response.getCode() == 200) {
-	    	return noticeboardParser.parseNoticeboardResult(responseBody);
-		}
-		
-		handleExceptions(response);
-		throw new N0ticeException(response.getBody());
+	@Deprecated // omit domain argument - the api will generate this for you, based on the name
+	public Noticeboard createNoticeboard(String domain, String name, String description, boolean moderated, Date endDate, Set<MediaType> supportedMediaTypes, String group, MediaFile cover) throws N0ticeException {
+		return postNewNoticeboard(domain, name, description, moderated, endDate, supportedMediaTypes, group, cover);
 	}
 	
 	public void closeNoticeboard(String domain) throws N0ticeException {
@@ -733,6 +699,56 @@ public class N0ticeApi {
 		}
 	}
 	
+	private Noticeboard postNewNoticeboard(String domain, String name,
+			String description, boolean moderated, Date endDate,
+			Set<MediaType> supportedMediaTypes, String group, MediaFile cover)
+			throws N0ticeException, MissingCredentialsExeception,
+			ParsingException {
+		OAuthRequest request = new OAuthRequest(Verb.POST, apiUrl + "/noticeboards/new");
+		MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
+		if (domain != null) {
+			addEntityPartParameter(entity, "domain", domain);
+		}
+		addEntityPartParameter(entity, "name", name);
+		addEntityPartParameter(entity, "description", description);
+		addEntityPartParameter(entity, "moderated", Boolean.toString(moderated));
+	
+		if (endDate != null) {
+			addEntityPartParameter(entity, "endDate", ISODateTimeFormat.dateTimeNoMillis().print(new DateTime(endDate)));
+		}
+		if (cover != null) {
+			entity.addPart("cover", new ByteArrayBody(cover.getData(), cover.getFilename()));
+		}
+		
+		StringBuilder supportedMediaTypesValue = new StringBuilder();
+		Iterator<MediaType> supportedMediaTypesIterator = supportedMediaTypes.iterator();
+		while(supportedMediaTypesIterator.hasNext()) {
+			supportedMediaTypesValue.append(supportedMediaTypesIterator.next());
+			if (supportedMediaTypesIterator.hasNext()) {
+				supportedMediaTypesValue.append(COMMA);
+			}
+		}
+		addEntityPartParameter(entity, "supportedMediaTypes", supportedMediaTypesValue.toString());
+		
+		if (group != null) {
+			addEntityPartParameter(entity, "group", group);
+		}
+		
+		request.addHeader("Content-Type", entity.getContentType().getValue());
+		addMultipartEntity(request, entity);
+		oauthSignRequest(request);
+		
+		Response response = request.send();
+		
+		final String responseBody = response.getBody();
+		if (response.getCode() == 200) {
+	    	return noticeboardParser.parseNoticeboardResult(responseBody);
+		}
+		
+		handleExceptions(response);
+		throw new N0ticeException(response.getBody());
+	}
+		
 	private byte[] extractMultpartBytes(MultipartEntity entity) throws IOException {
 		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 		entity.writeTo(byteArrayOutputStream);			
