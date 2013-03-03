@@ -1,8 +1,10 @@
 package com.n0tice.api.client.parsers;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
+import java.util.Map;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -50,6 +52,15 @@ public class SearchParserTest {
 		assertEquals(new DateTime("2012-04-07T17:55:37Z", DateTimeZone.UTC), new DateTime(firstItem.getModified()));
 		assertEquals(3, firstItem.getTags().size());
 		assertEquals("report/tags/bath", firstItem.getTags().get(0).getId());
+	}
+	
+	@Test
+	public void canParseRefinementCountsFromSearchResults() throws Exception {
+		ResultSet results = searchParser.parseSearchResults(ContentLoader.loadContent("latestItems.json"));
+		Map<String, Integer> usersRefinement = results.getRefinements().get("user");
+		assertNotNull(usersRefinement);
+		System.out.println(usersRefinement);
+		assertEquals(123, usersRefinement.get("formbyfirst").intValue());
 	}
 	
 	@Test

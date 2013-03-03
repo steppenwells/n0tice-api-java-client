@@ -1,7 +1,10 @@
 package com.n0tice.api.client.parsers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormatter;
@@ -25,6 +28,7 @@ import com.n0tice.api.client.model.Video;
 // TODO migrate to Jackson once we can prove that it is Android safe
 public class SearchParser {
 
+	private static final String REFINEMENTS = "refinements";
 	private static final String AWAITING_MODERATION = "awaitingModeration";
 	private static final String MODERATION_STATUS = "moderationStatus";
 	private static final String END_DATE = "endDate";
@@ -74,7 +78,9 @@ public class SearchParser {
 					JSONObject contentItem = resultContentItems.getJSONObject(i);					
 					contentItems.add(jsonToContentItem(contentItem));
 				}
-				return new ResultSet(totalMatches, startIndex, contentItems);
+				
+				final HashMap<String, Map<String, Integer>> refinements = extractRefinements(searchResultsJSON);				
+				return new ResultSet(totalMatches, startIndex, contentItems, refinements);
 			}
 			
 		} catch (JSONException e) {
@@ -101,6 +107,57 @@ public class SearchParser {
 		}
 	}
 
+	public Content parseReport(String json) throws ParsingException {
+		try {
+			JSONObject reportJSON = new JSONObject(json);			
+			return jsonToContentItem(reportJSON);
+			
+		} catch (JSONException e) {
+			throw new ParsingException(e.getMessage());
+		}
+	}
+	
+	public Update parseUpdate(String json) throws ParsingException {
+		try {
+			return parseJsonUpdate(new JSONObject(json));			
+		} catch (JSONException e) {
+			throw new ParsingException(e.getMessage());
+		}
+	}
+	
+	public Group parseGroupResult(String json) throws ParsingException {
+		try {
+			final JSONObject jsonObject = new JSONObject(json);			
+			return new Group(jsonObject.getString(ID), jsonObject.getString(NAME));			
+		} catch (JSONException e) {
+			throw new ParsingException();
+		}
+	}
+	
+	public List<String> parseNotifications(String json) throws ParsingException {
+		ArrayList<String> notifications = new ArrayList<String>();
+		try {
+			JSONArray jsonNotifications = new JSONArray(json);
+			for (int i = 0; i < jsonNotifications.length(); i++) {
+				JSONObject notification = jsonNotifications.getJSONObject(i);		
+				notifications.add(notification.getString(MESSAGE));
+			}
+			return notifications;
+		} catch (JSONException e) {
+			throw new ParsingException();
+		}	
+	}
+	
+	public int parseVotes(String json) throws ParsingException {
+		try {
+			JSONArray votesJson = new JSONArray(json);
+			return votesJson.length();
+			
+		} catch (JSONException e) {
+			throw new ParsingException();
+		}
+	}
+	
 	private Content jsonToContentItem(JSONObject contentItemJSON) throws JSONException {
 		User user = null;
 		if (contentItemJSON.has(USER)) {
@@ -171,56 +228,26 @@ public class SearchParser {
 				moderationStatus
 				);
 	}
-	
-	public Content parseReport(String json) throws ParsingException {
-		try {
-			JSONObject reportJSON = new JSONObject(json);			
-			return jsonToContentItem(reportJSON);
-			
-		} catch (JSONException e) {
-			throw new ParsingException(e.getMessage());
-		}
-	}
-	
-	public Update parseUpdate(String json) throws ParsingException {
-		try {
-			return parseJsonUpdate(new JSONObject(json));			
-		} catch (JSONException e) {
-			throw new ParsingException(e.getMessage());
-		}
-	}
-	
-	public Group parseGroupResult(String json) throws ParsingException {
-		try {
-			final JSONObject jsonObject = new JSONObject(json);			
-			return new Group(jsonObject.getString(ID), jsonObject.getString(NAME));			
-		} catch (JSONException e) {
-			throw new ParsingException();
-		}
-	}
-	
-	public List<String> parseNotifications(String json) throws ParsingException {
-		ArrayList<String> notifications = new ArrayList<String>();
-		try {
-			JSONArray jsonNotifications = new JSONArray(json);
-			for (int i = 0; i < jsonNotifications.length(); i++) {
-				JSONObject notification = jsonNotifications.getJSONObject(i);		
-				notifications.add(notification.getString(MESSAGE));
+
+	private HashMap<String, Map<String, Integer>> extractRefinements(JSONObject searchResultsJSON) throws JSONException {
+		final HashMap<String, Map<String, Integer>> refinements = new HashMap<String, Map<String, Integer>>();
+		if (searchResultsJSON.has(REFINEMENTS)) {
+			JSONObject searchRefinementsJSON = searchResultsJSON.getJSONObject(REFINEMENTS);
+			Iterator<String> refinementNames = searchRefinementsJSON.keys();
+			while(refinementNames.hasNext()) {
+				final String refinementName = refinementNames.next();				
+				
+				final Map<String, Integer> refinement = new HashMap<String, Integer>();			
+				final JSONObject refinementJSON = searchRefinementsJSON.getJSONObject(refinementName);										
+				final Iterator<String> values = refinementJSON.keys();
+				while(values.hasNext()) {
+					final String value = values.next();
+					refinement.put(value, refinementJSON.getInt(value));
+				}
+				refinements.put(refinementName, refinement);
 			}
-			return notifications;
-		} catch (JSONException e) {
-			throw new ParsingException();
-		}	
-	}
-	
-	public int parseVotes(String json) throws ParsingException {
-		try {
-			JSONArray votesJson = new JSONArray(json);
-			return votesJson.length();
-			
-		} catch (JSONException e) {
-			throw new ParsingException();
 		}
+		return refinements;
 	}
 	
 	private String getNoticeboardNameFromJSON(JSONObject contentItem) throws JSONException {
