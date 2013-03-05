@@ -7,16 +7,18 @@ public class Image {
 	private final String medium;
 	private final String large;
 	private final String extraLarge;
-	private final String orientation;
 	private final String mediumlandscape;
+	private final String mediumoriginalaspectdouble;
+	private final String orientation;
 	
-	public Image(String id, String small, String medium, String large, String extraLarge, String mediumlandscape, String orientation) {
+	public Image(String id, String small, String medium, String large, String extraLarge, String mediumlandscape, String mediumoriginalaspectdouble, String orientation) {
 		this.id = id;
 		this.small = small;
 		this.medium = medium;
 		this.large = large;
 		this.extraLarge = extraLarge;
-		this.mediumlandscape = mediumlandscape;		
+		this.mediumlandscape = mediumlandscape;
+		this.mediumoriginalaspectdouble = mediumoriginalaspectdouble;		
 		this.orientation = orientation;
 	}
 	
@@ -35,6 +37,10 @@ public class Image {
 	public String getMediumlandscape() {
 		return mediumlandscape;
 	}
+	
+	public String getMediumoriginalaspectdouble() {
+		return mediumoriginalaspectdouble;
+	}
 
 	public String getLarge() {
 		return large;
@@ -50,10 +56,11 @@ public class Image {
 
 	@Override
 	public String toString() {
-		return "Image [id=" + id + ", small=" + small + ", medium=" + medium
-				+ ", large=" + large + ", extraLarge=" + extraLarge
-				+ ", orientation=" + orientation + ", mediumlandscape="
-				+ mediumlandscape + "]";
+		return "Image [extraLarge=" + extraLarge + ", id=" + id + ", large="
+				+ large + ", medium=" + medium + ", mediumlandscape="
+				+ mediumlandscape + ", mediumoriginalaspectdouble="
+				+ mediumoriginalaspectdouble + ", orientation=" + orientation
+				+ ", small=" + small + "]";
 	}
 	
 }
