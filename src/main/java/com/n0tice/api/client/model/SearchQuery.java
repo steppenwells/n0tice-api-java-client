@@ -29,6 +29,7 @@ public class SearchQuery {
 	private String moderationStatus;
 	private String order;
 	private String noticeBoardOwnedBy;
+	private Integer refinementCount;
 	
 	public SearchQuery q(String q) {
 		this.q = q;
@@ -144,6 +145,11 @@ public class SearchQuery {
 		return this;
 	}
 	
+	public SearchQuery refinementCount(int refinementCount) {
+		this.refinementCount = refinementCount;
+		return this;
+	}
+	
 	public String getType() {
 		return type;
 	}
@@ -228,6 +234,10 @@ public class SearchQuery {
 		return noticeBoardOwnedBy;
 	}
 	
+	public Integer getRefinementCount() {
+		return refinementCount;
+	}
+
 	@Override
 	public String toString() {
 		return "SearchQuery [q=" + q + ", page=" + page + ", limit=" + limit
@@ -240,7 +250,8 @@ public class SearchQuery {
 				+ ", endingAfter=" + endingAfter + ", hasImages=" + hasImages
 				+ ", awaitingModeration=" + awaitingModeration
 				+ ", moderationStatus=" + moderationStatus + ", order=" + order
-				+ ", noticeBoardOwnedBy=" + noticeBoardOwnedBy + "]";
+				+ ", noticeBoardOwnedBy=" + noticeBoardOwnedBy
+				+ ", refinementCount=" + refinementCount + "]";
 	}
 	
 }

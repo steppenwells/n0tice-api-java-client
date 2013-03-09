@@ -140,4 +140,9 @@ public class SearchUrlBuilderTest {
 		assertEquals("http://api.local/search?noticeboardOwnedBy=someone", builder.toUrl(new SearchQuery().noticeBoardOwnedBy("someone")));
 	}
 	
+	@Test
+	public void canSpecifyRefinementCount() throws Exception {
+		assertEquals("http://api.local/search?refinementCount=7", builder.toUrl(new SearchQuery().refinementCount(7)));
+	}
+	
 }

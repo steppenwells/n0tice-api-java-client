@@ -51,7 +51,6 @@ public class SearchUrlBuilder {
 		}
 		if (searchQuery.getLatitude() != null) {
 			url.appendParameter("latitude", Double.toString(searchQuery.getLatitude()));
-
 		}
 		if (searchQuery.getLongitude() != null) {
 			url.appendParameter("longitude", Double.toString(searchQuery.getLongitude()));
@@ -88,6 +87,9 @@ public class SearchUrlBuilder {
 		}
 		if (searchQuery.getOrder() != null) {
 			url.appendParameter("order", searchQuery.getOrder());
+		}
+		if (searchQuery.getRefinementCount() != null) {
+			url.appendParameter("refinementCount", Integer.toString(searchQuery.getRefinementCount()));
 		}
 		
 		return url.toString();
