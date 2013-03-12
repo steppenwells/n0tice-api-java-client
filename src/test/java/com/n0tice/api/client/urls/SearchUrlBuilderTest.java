@@ -148,8 +148,8 @@ public class SearchUrlBuilderTest {
 	
 	@Test
 	public void canComposeNoticeboardSearchUrl() throws Exception {
-		NoticeboardSearchQuery noticeboardSearchQuery = new NoticeboardSearchQuery().q("a board").page(2).noticeboardOwnedBy("auser").open();
-		assertEquals("http://api.local/noticeboards?q=a+board&page=2&noticeboardOwnedBy=auser&open=true", builder.toUrl(noticeboardSearchQuery));
+		NoticeboardSearchQuery noticeboardSearchQuery = new NoticeboardSearchQuery().q("a board").page(2).noticeboardOwnedBy("auser").open().moderated(false);
+		assertEquals("http://api.local/noticeboards?q=a+board&page=2&noticeboardOwnedBy=auser&moderated=false&open=true", builder.toUrl(noticeboardSearchQuery));
 	}
 	
 }

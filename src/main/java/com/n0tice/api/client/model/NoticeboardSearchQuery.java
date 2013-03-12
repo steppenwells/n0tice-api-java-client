@@ -6,6 +6,7 @@ public class NoticeboardSearchQuery {
 	private String q = null;
 	private Integer page = null;
 	private String noticeBoardOwnedBy = null;
+	private Boolean moderated = null;
 	private Boolean alwaysOpen = null;
 	private Boolean open = null;
 	private Boolean closed = null;
@@ -22,6 +23,11 @@ public class NoticeboardSearchQuery {
 	
 	public NoticeboardSearchQuery noticeboardOwnedBy(String noticeboardOwnedBy) {
 		this.noticeBoardOwnedBy = noticeboardOwnedBy;
+		return this;
+	}
+	
+	public NoticeboardSearchQuery moderated(boolean moderated) {
+		this.moderated = moderated;
 		return this;
 	}
 	
@@ -51,7 +57,11 @@ public class NoticeboardSearchQuery {
 	public String getNoticeBoardOwnedBy() {
 		return noticeBoardOwnedBy;
 	}
-
+	
+	public Boolean getModerated() {
+		return moderated;		
+	}
+	
 	public Boolean getAlwaysOpen() {
 		return alwaysOpen;
 	}
@@ -67,9 +77,9 @@ public class NoticeboardSearchQuery {
 	@Override
 	public String toString() {
 		return "NoticeboardSearchQuery [q=" + q + ", page=" + page
-				+ ", noticeBoardOwnedBy=" + noticeBoardOwnedBy
-				+ ", alwaysOpen=" + alwaysOpen + ", open=" + open + ", closed="
-				+ closed + "]";
+				+ ", noticeBoardOwnedBy=" + noticeBoardOwnedBy + ", moderated="
+				+ moderated + ", alwaysOpen=" + alwaysOpen + ", open=" + open
+				+ ", closed=" + closed + "]";
 	}
 	
 }

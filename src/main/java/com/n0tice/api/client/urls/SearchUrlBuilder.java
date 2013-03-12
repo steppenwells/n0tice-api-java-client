@@ -110,6 +110,9 @@ public class SearchUrlBuilder {
 		if (noticeboardSearchQuery.getNoticeBoardOwnedBy() != null) {
 			url.appendParameter("noticeboardOwnedBy", noticeboardSearchQuery.getNoticeBoardOwnedBy());
 		}
+		if (noticeboardSearchQuery.getModerated() != null) {
+			url.appendParameter("moderated", Boolean.toString(noticeboardSearchQuery.getModerated()));
+		}
 		if (noticeboardSearchQuery.getAlwaysOpen() != null) {
 			url.appendParameter("alwaysOpen", Boolean.toString(noticeboardSearchQuery.getAlwaysOpen()));
 		}
