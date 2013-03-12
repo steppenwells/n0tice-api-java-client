@@ -52,6 +52,8 @@ import com.n0tice.api.client.model.ModerationComplaint;
 import com.n0tice.api.client.model.ModerationComplaintType;
 import com.n0tice.api.client.model.NewUserResponse;
 import com.n0tice.api.client.model.Noticeboard;
+import com.n0tice.api.client.model.NoticeboardResultSet;
+import com.n0tice.api.client.model.NoticeboardSearchQuery;
 import com.n0tice.api.client.model.Reoccurence;
 import com.n0tice.api.client.model.ResultSet;
 import com.n0tice.api.client.model.SearchQuery;
@@ -190,6 +192,10 @@ public class N0ticeApi {
 	
 	public ResultSet search(SearchQuery searchQuery) throws N0ticeException {
 		return searchParser.parseSearchResults(httpFetcher.fetchContent(searchUrlBuilder.toUrl(searchQuery), UTF_8));
+	}
+	
+	public NoticeboardResultSet searchNoticeboards(NoticeboardSearchQuery noticeboardSearchQuery) throws N0ticeException {
+		return noticeboardParser.parseNoticeboardSearchResults(httpFetcher.fetchContent(searchUrlBuilder.toUrl(noticeboardSearchQuery), UTF_8));
 	}
 	
 	public User user(String username) throws N0ticeException {

@@ -3,15 +3,17 @@ package com.n0tice.api.client.urls;
 import org.joda.time.format.ISODateTimeFormat;
 
 import com.google.common.base.Joiner;
+import com.n0tice.api.client.model.NoticeboardSearchQuery;
 import com.n0tice.api.client.model.SearchQuery;
 
 public class SearchUrlBuilder {
 
 	private static final String SEARCH = "/search";
-   
+	private static final String NOTICEBOARDS = "/noticeboards";
+	
 	private static Joiner COMMA_JOINER = Joiner.on(",");
    
-	final private String apiUrl;
+	private final String apiUrl;
 	
 	public SearchUrlBuilder(String apiUrl) {
 		this.apiUrl = apiUrl;
@@ -92,6 +94,31 @@ public class SearchUrlBuilder {
 			url.appendParameter("refinementCount", Integer.toString(searchQuery.getRefinementCount()));
 		}
 		
+		return url.toString();
+	}
+
+	public String toUrl(NoticeboardSearchQuery noticeboardSearchQuery) {
+		final UrlStringBuilder url = new UrlStringBuilder();
+		url.append(apiUrl);
+		url.append(NOTICEBOARDS);
+		if (noticeboardSearchQuery.getQ() != null) {
+			url.appendParameter("q", noticeboardSearchQuery.getQ());
+		}
+		if (noticeboardSearchQuery.getPage() != null) {
+			url.appendParameter("page", Integer.toString(noticeboardSearchQuery.getPage()));
+		}
+		if (noticeboardSearchQuery.getNoticeBoardOwnedBy() != null) {
+			url.appendParameter("noticeboardOwnedBy", noticeboardSearchQuery.getNoticeBoardOwnedBy());
+		}
+		if (noticeboardSearchQuery.getAlwaysOpen() != null) {
+			url.appendParameter("alwaysOpen", Boolean.toString(noticeboardSearchQuery.getAlwaysOpen()));
+		}
+		if (noticeboardSearchQuery.getOpen() != null) {
+			url.appendParameter("open", Boolean.toString(noticeboardSearchQuery.getOpen()));
+		}
+		if (noticeboardSearchQuery.getClosed() != null) {
+			url.appendParameter("closed", Boolean.toString(noticeboardSearchQuery.getClosed()));
+		}
 		return url.toString();
 	}
 	

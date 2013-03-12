@@ -6,6 +6,7 @@ import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.n0tice.api.client.model.NoticeboardSearchQuery;
 import com.n0tice.api.client.model.SearchQuery;
 
 public class SearchUrlBuilderTest {
@@ -143,6 +144,12 @@ public class SearchUrlBuilderTest {
 	@Test
 	public void canSpecifyRefinementCount() throws Exception {
 		assertEquals("http://api.local/search?refinementCount=7", builder.toUrl(new SearchQuery().refinementCount(7)));
+	}
+	
+	@Test
+	public void canComposeNoticeboardSearchUrl() throws Exception {
+		NoticeboardSearchQuery noticeboardSearchQuery = new NoticeboardSearchQuery().q("a board").page(2).noticeboardOwnedBy("auser").open();
+		assertEquals("http://api.local/noticeboards?q=a+board&page=2&noticeboardOwnedBy=auser&open=true", builder.toUrl(noticeboardSearchQuery));
 	}
 	
 }

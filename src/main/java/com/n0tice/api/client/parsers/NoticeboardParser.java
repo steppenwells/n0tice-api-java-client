@@ -16,6 +16,7 @@ import com.n0tice.api.client.model.Group;
 import com.n0tice.api.client.model.Image;
 import com.n0tice.api.client.model.MediaType;
 import com.n0tice.api.client.model.Noticeboard;
+import com.n0tice.api.client.model.NoticeboardResultSet;
 
 public class NoticeboardParser {
 
@@ -38,13 +39,10 @@ public class NoticeboardParser {
 	}
 	
 	public List<Noticeboard> parseNoticeboards(String json) throws ParsingException {
-		List<Noticeboard> noticeboards = new ArrayList<Noticeboard>();		
 		try {
 			final JSONArray noticeboardsJSON = new JSONArray(json);
-			for (int i = 0; i < noticeboardsJSON.length(); i++) {					
-				noticeboards.add(parseNoticeboardResult(noticeboardsJSON.getJSONObject(i)));
-			}
-			return noticeboards;
+			return parseNoticeboardList(noticeboardsJSON);
+			
 		} catch (JSONException e) {
 			e.printStackTrace();
 			throw new ParsingException();
@@ -61,7 +59,17 @@ public class NoticeboardParser {
 		}
 	}
 	
-	public Noticeboard parseNoticeboardResult(JSONObject noticeboardJsonObject) throws ParsingException {
+	public NoticeboardResultSet parseNoticeboardSearchResults(String json) throws ParsingException {
+		try {
+			final JSONObject resultsJSON = new JSONObject(json);
+			final long totalMatches = resultsJSON.getLong("numberFound");
+			return new NoticeboardResultSet(totalMatches, parseNoticeboardList(resultsJSON.getJSONArray("results")));
+		} catch (JSONException e) {
+			throw new ParsingException(e.getMessage());
+		}
+	}
+	
+	protected Noticeboard parseNoticeboardResult(JSONObject noticeboardJsonObject) throws ParsingException {
 		try {
 			final Image background = noticeboardJsonObject.has(BACKGROUND) ? imageParser.parseImage(noticeboardJsonObject.getJSONObject(BACKGROUND)) : null;
 			final Image cover =  noticeboardJsonObject.has(COVER) ? imageParser.parseImage(noticeboardJsonObject.getJSONObject(COVER)) : null;
@@ -105,6 +113,14 @@ public class NoticeboardParser {
 		} catch (JSONException e) {
 			throw new ParsingException(e.getMessage());
 		}
+	}
+	
+	private List<Noticeboard> parseNoticeboardList(final JSONArray noticeboardsJSON) throws ParsingException, JSONException {
+		List<Noticeboard> noticeboards = new ArrayList<Noticeboard>();
+		for (int i = 0; i < noticeboardsJSON.length(); i++) {		
+			noticeboards.add(parseNoticeboardResult(noticeboardsJSON.getJSONObject(i)));
+		}
+		return noticeboards;
 	}
 	
 }
