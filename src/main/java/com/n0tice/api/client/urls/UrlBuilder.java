@@ -3,7 +3,6 @@ package com.n0tice.api.client.urls;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
-
 public class UrlBuilder {
 
 	private static final String HISTORY = "history";
@@ -60,6 +59,10 @@ public class UrlBuilder {
 		return apiUrl + "/moderation/states";
 	}
 	
+	public String closeModerationComplaint(String contentId, int flagId) {
+		return apiUrl + "/" + contentId + "/flag/" + flagId + "/close";
+	}
+		
 	private String urlEncode(String value) {
 		try {
 			return URLEncoder.encode(value, UTF_8);

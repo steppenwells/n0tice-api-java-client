@@ -29,8 +29,10 @@ public class ModerationComplaintParser {
 			JSONArray complaintsJSON = new JSONArray(json);
 			for (int i = 0; i < complaintsJSON.length(); i++) {
 				JSONObject complaintJSON = complaintsJSON.getJSONObject(i);
+				int id = complaintJSON.getInt("id");
+				String status = complaintJSON.getString("status");
 				complaints.add(new ModerationComplaint(userParser.jsonToUser(complaintJSON.getJSONObject("user")), parseDate(complaintJSON.getString("date")).toDate(),
-						complaintJSON.getString("type"), complaintJSON.has("notes") ? complaintJSON.getString("notes") : null));
+						complaintJSON.getString("type"), complaintJSON.has("notes") ? complaintJSON.getString("notes") : null, id, status));
 			}			
 			
 		} catch (JSONException e) {

@@ -25,4 +25,10 @@ public class UrlBuilderTest {
 		assertEquals("http://n0ticeapis.com/2/noticeboard/someboard/close", urlBuilder.closeNoticeboard("someboard"));
 	}
 	
+	@Test
+	public void canComposeCloseModerationComplaintPostUrl() throws Exception {		
+		assertEquals("http://n0ticeapis.com/2/report/123/flag/456/close", urlBuilder.closeModerationComplaint("report/123", 456));
+
+	}
+	
 }
