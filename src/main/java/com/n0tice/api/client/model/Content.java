@@ -27,11 +27,12 @@ public class Content {
 	private final int reposts;
 	private final Boolean awaitingModeration;
 	private final String moderationStatus;
+	private final int moderationFlags;
 	
 	public Content(String id, String apiUrl, String webUrl, String type,
 			String headline, Place place, User user, String noticeboard,
 			DateTime created, DateTime modified, List<Tag> tags, List<Update> updates, DateTime startDate, DateTime endDate, 
-			Reoccurence reoccurence, DateTime reoccursTo, int interestingVotes, int reposts, Boolean awaitingModeration, String moderationStatus) {
+			Reoccurence reoccurence, DateTime reoccursTo, int interestingVotes, int reposts, Boolean awaitingModeration, String moderationStatus, int moderationFlags) {
 		this.id = id;
 		this.apiUrl = apiUrl;
 		this.webUrl = webUrl;
@@ -52,6 +53,7 @@ public class Content {
 		this.reposts = reposts;
 		this.awaitingModeration = awaitingModeration;
 		this.moderationStatus = moderationStatus;
+		this.moderationFlags = moderationFlags;
 	}
 
 	public String getId() {
@@ -133,6 +135,10 @@ public class Content {
 	public String getModerationStatus() {
 		return moderationStatus;
 	}
+	
+	public int getModerationFlags() {
+		return moderationFlags;
+	}
 
 	@Override
 	public String toString() {
@@ -140,6 +146,7 @@ public class Content {
 				+ awaitingModeration + ", created=" + created + ", endDate="
 				+ endDate + ", headline=" + headline + ", id=" + id
 				+ ", interestingVotes=" + interestingVotes
+				+ ", moderationFlags=" + moderationFlags
 				+ ", moderationStatus=" + moderationStatus + ", modified="
 				+ modified + ", noticeboard=" + noticeboard + ", place="
 				+ place + ", reoccurence=" + reoccurence + ", reoccursTo="

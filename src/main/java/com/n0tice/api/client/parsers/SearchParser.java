@@ -31,6 +31,7 @@ public class SearchParser {
 	private static final String REFINEMENTS = "refinements";
 	private static final String AWAITING_MODERATION = "awaitingModeration";
 	private static final String MODERATION_STATUS = "moderationStatus";
+	private static final String MODERATION_FLAGS = "numberOfComplaints";
 	private static final String END_DATE = "endDate";
 	private static final String REOCCURS_TO = "reoccursTo";
 	private static final String REOCCURS = "reoccurs";
@@ -205,6 +206,7 @@ public class SearchParser {
 		
 		final Boolean awaitingModeration = contentItemJSON.has(AWAITING_MODERATION) ? contentItemJSON.getBoolean(AWAITING_MODERATION) : null;		
 		final String moderationStatus = contentItemJSON.has(MODERATION_STATUS) ? contentItemJSON.getString(MODERATION_STATUS) : null;
+		final int moderationFlags = contentItemJSON.has(MODERATION_FLAGS) ? contentItemJSON.getInt(MODERATION_FLAGS) : 0;
 		
 		return new Content(contentItemJSON.getString(ID), 
 				contentItemJSON.getString(API_URL), 
@@ -225,7 +227,8 @@ public class SearchParser {
 				interestingVotes,
 				reposts,
 				awaitingModeration,
-				moderationStatus
+				moderationStatus,
+				moderationFlags
 				);
 	}
 
