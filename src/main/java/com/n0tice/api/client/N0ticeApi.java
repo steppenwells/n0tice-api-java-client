@@ -250,13 +250,13 @@ public class N0ticeApi {
 		return postReport(headline, latitude, longitude, body, link, image, video, noticeboard, null);		
 	}
 	
-	public Noticeboard createNoticeboard(String name, String description, boolean moderated, Date endDate, Set<MediaType> supportedMediaTypes, String group, MediaFile cover) throws N0ticeException {
-		return postNewNoticeboard(null, name, description, moderated, endDate, supportedMediaTypes, group, cover);
+	public Noticeboard createNoticeboard(String name, String description, boolean moderated, Date endDate, Set<MediaType> supportedMediaTypes, String group, MediaFile cover, boolean featured) throws N0ticeException {
+		return postNewNoticeboard(null, name, description, moderated, endDate, supportedMediaTypes, group, cover, featured);
 	}
 	
 	@Deprecated // omit domain argument - the api will generate this for you, based on the name
-	public Noticeboard createNoticeboard(String domain, String name, String description, boolean moderated, Date endDate, Set<MediaType> supportedMediaTypes, String group, MediaFile cover) throws N0ticeException {
-		return postNewNoticeboard(domain, name, description, moderated, endDate, supportedMediaTypes, group, cover);
+	public Noticeboard createNoticeboard(String domain, String name, String description, boolean moderated, Date endDate, Set<MediaType> supportedMediaTypes, String group, MediaFile cover, boolean featured) throws N0ticeException {
+		return postNewNoticeboard(domain, name, description, moderated, endDate, supportedMediaTypes, group, cover, featured);
 	}
 	
 	public void closeNoticeboard(String domain) throws N0ticeException {
@@ -720,7 +720,7 @@ public class N0ticeApi {
 	
 	private Noticeboard postNewNoticeboard(String domain, String name,
 			String description, boolean moderated, Date endDate,
-			Set<MediaType> supportedMediaTypes, String group, MediaFile cover)
+			Set<MediaType> supportedMediaTypes, String group, MediaFile cover, boolean featured)
 			throws N0ticeException, MissingCredentialsExeception,
 			ParsingException {
 		OAuthRequest request = new OAuthRequest(Verb.POST, apiUrl + "/noticeboards/new");
@@ -731,7 +731,8 @@ public class N0ticeApi {
 		addEntityPartParameter(entity, "name", name);
 		addEntityPartParameter(entity, "description", description);
 		addEntityPartParameter(entity, "moderated", Boolean.toString(moderated));
-	
+		addEntityPartParameter(entity, "featured", Boolean.toString(featured));
+		
 		if (endDate != null) {
 			addEntityPartParameter(entity, "endDate", ISODateTimeFormat.dateTimeNoMillis().print(new DateTime(endDate)));
 		}
