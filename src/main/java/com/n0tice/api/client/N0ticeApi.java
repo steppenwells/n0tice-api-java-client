@@ -259,6 +259,54 @@ public class N0ticeApi {
 		return postNewNoticeboard(domain, name, description, moderated, endDate, supportedMediaTypes, group, cover, featured);
 	}
 	
+	public Noticeboard editNoticeboard(String domain, String name, String description, Boolean moderated, Boolean featured) throws N0ticeException {		
+		OAuthRequest request = new OAuthRequest(Verb.POST, urlBuilder.noticeBoard(domain));
+		MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
+		
+		addEntityPartParameter(entity, "name", name);
+		addEntityPartParameter(entity, "description", description);
+		addEntityPartParameter(entity, "moderated", Boolean.toString(moderated));
+		addEntityPartParameter(entity, "featured", Boolean.toString(featured));
+		
+		// TODO implement
+		/*
+		if (endDate != null) {
+			addEntityPartParameter(entity, "endDate", ISODateTimeFormat.dateTimeNoMillis().print(new DateTime(endDate)));
+		}
+		if (cover != null) {
+			entity.addPart("cover", new ByteArrayBody(cover.getData(), cover.getFilename()));
+		}
+		
+		StringBuilder supportedMediaTypesValue = new StringBuilder();
+		Iterator<MediaType> supportedMediaTypesIterator = supportedMediaTypes.iterator();
+		while(supportedMediaTypesIterator.hasNext()) {
+			supportedMediaTypesValue.append(supportedMediaTypesIterator.next());
+			if (supportedMediaTypesIterator.hasNext()) {
+				supportedMediaTypesValue.append(COMMA);
+			}
+		}
+		addEntityPartParameter(entity, "supportedMediaTypes", supportedMediaTypesValue.toString());
+		
+		if (group != null) {
+			addEntityPartParameter(entity, "group", group);
+		}
+		*/
+		
+		request.addHeader("Content-Type", entity.getContentType().getValue());
+		addMultipartEntity(request, entity);
+		oauthSignRequest(request);
+		
+		Response response = request.send();
+		
+		final String responseBody = response.getBody();
+		if (response.getCode() == 200) {
+	    	return noticeboardParser.parseNoticeboardResult(responseBody);
+		}
+		
+		handleExceptions(response);
+		throw new N0ticeException(response.getBody());
+	}
+ 	
 	public void closeNoticeboard(String domain) throws N0ticeException {
 		OAuthRequest request = new OAuthRequest(Verb.POST, urlBuilder.closeNoticeboard(domain));
 		oauthSignRequest(request);
