@@ -22,6 +22,7 @@ public class UserParser {
 	private static final String DISPLAY_NAME = "displayName";
 	private static final String BIO = "bio";
 	private static final String PROFILE_IMAGE = "image";
+	private static final String PROFILE_URL = "profileUrl";
 	
 	private ImageParser imageParser;
 		
@@ -112,7 +113,11 @@ public class UserParser {
 			followedNoticeboards = followsJSON.getInt(NOTICEBOARDS);		
 			followedUsers = followsJSON.getInt(USERS);
 		}
-		return new User(userJSON.getString(USERNAME), displayName, bio, profileImage, noticeboards, followedNoticeboards, followedUsers);
+		String profileUrl = null;
+		if (userJSON.has(PROFILE_URL)) {
+			profileUrl = userJSON.getString(PROFILE_URL);
+		}
+		return new User(userJSON.getString(USERNAME), displayName, bio, profileImage, noticeboards, followedNoticeboards, followedUsers, profileUrl);
 	}
 	
 }

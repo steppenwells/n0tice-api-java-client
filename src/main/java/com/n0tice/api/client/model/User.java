@@ -10,12 +10,13 @@ public class User {
 	private Integer noticeboards;
 	private Integer followedNoticeboards;
 	private Integer followedUsers;
+	private String profileUrl;
 	
 	public User(String username) {
 		this.username = username;
 	}
 
-	public User(String username, String displayName, String bio, Image profileImage, Integer noticeboards, Integer followedNoticeboards, Integer followedUsers) {
+	public User(String username, String displayName, String bio, Image profileImage, Integer noticeboards, Integer followedNoticeboards, Integer followedUsers, String profileUrl) {
 		this.username = username;
 		this.displayName = displayName;
 		this.bio = bio;
@@ -23,6 +24,7 @@ public class User {
 		this.noticeboards = noticeboards;
 		this.followedNoticeboards = followedNoticeboards;
 		this.followedUsers = followedUsers;
+		this.profileUrl = profileUrl;
 	}
 	
 	public String getUsername() {
@@ -53,6 +55,14 @@ public class User {
 		return followedUsers;
 	}
 	
+	public String getProfileUrl() {
+		return profileUrl;
+	}
+
+	public void setProfileUrl(String profileUrl) {
+		this.profileUrl = profileUrl;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -81,10 +91,11 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "User [username=" + username + ", displayName=" + displayName
-				+ ", bio=" + bio + ", profileImage=" + profileImage
-				+ ", noticeboards=" + noticeboards + ", followedNoticeboards="
-				+ followedNoticeboards + "]";
+		return "User [bio=" + bio + ", displayName=" + displayName
+				+ ", followedNoticeboards=" + followedNoticeboards
+				+ ", followedUsers=" + followedUsers + ", noticeboards="
+				+ noticeboards + ", profileImage=" + profileImage
+				+ ", profileUrl=" + profileUrl + ", username=" + username + "]";
 	}
 	
 }
