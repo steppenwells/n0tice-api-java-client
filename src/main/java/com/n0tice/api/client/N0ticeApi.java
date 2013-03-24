@@ -250,7 +250,8 @@ public class N0ticeApi {
 		return postReport(headline, latitude, longitude, body, link, image, video, noticeboard, null);		
 	}
 	
-	public Noticeboard createNoticeboard(String name, String description, boolean moderated, Date endDate, Set<MediaType> supportedMediaTypes, String group, MediaFile cover, boolean featured) throws N0ticeException {
+	public Noticeboard createNoticeboard(String name, String description, boolean moderated, Date endDate, Set<MediaType> supportedMediaTypes, String group, 
+			MediaFile cover, boolean featured) throws N0ticeException {
 		return postNewNoticeboard(null, name, description, moderated, endDate, supportedMediaTypes, group, cover, featured);
 	}
 	
@@ -259,7 +260,7 @@ public class N0ticeApi {
 		return postNewNoticeboard(domain, name, description, moderated, endDate, supportedMediaTypes, group, cover, featured);
 	}
 	
-	public Noticeboard editNoticeboard(String domain, String name, String description, Boolean moderated, Boolean featured) throws N0ticeException {		
+	public Noticeboard editNoticeboard(String domain, String name, String description, Boolean moderated, Boolean featured, MediaFile cover) throws N0ticeException {		
 		OAuthRequest request = new OAuthRequest(Verb.POST, urlBuilder.noticeBoard(domain));
 		MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
 		
@@ -267,6 +268,9 @@ public class N0ticeApi {
 		addEntityPartParameter(entity, "description", description);
 		addEntityPartParameter(entity, "moderated", Boolean.toString(moderated));
 		addEntityPartParameter(entity, "featured", Boolean.toString(featured));
+		if (cover != null) {
+			entity.addPart("cover", new ByteArrayBody(cover.getData(), cover.getFilename()));
+		}
 		
 		// TODO implement
 		/*
