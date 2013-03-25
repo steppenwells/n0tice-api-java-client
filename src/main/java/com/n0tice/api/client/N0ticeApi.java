@@ -266,8 +266,8 @@ public class N0ticeApi {
 		
 		addEntityPartParameter(entity, "name", name);
 		addEntityPartParameter(entity, "description", description);
-		addEntityPartParameter(entity, "moderated", Boolean.toString(moderated));
-		addEntityPartParameter(entity, "featured", Boolean.toString(featured));
+		addEntityPartParameter(entity, "moderated", moderated != null ? Boolean.toString(moderated) : null);
+		addEntityPartParameter(entity, "featured", featured != null ? Boolean.toString(featured) : null);
 		if (cover != null) {
 			entity.addPart("cover", new ByteArrayBody(cover.getData(), cover.getFilename()));
 		}
