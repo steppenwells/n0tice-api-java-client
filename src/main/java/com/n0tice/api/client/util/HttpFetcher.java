@@ -32,7 +32,7 @@ public class HttpFetcher {	// TODO should be be visible by apps using this jar
 
 	//private final Logger log = Logger.getLogger(HttpFetcher.class);
 
-	private static final int HTTP_TIMEOUT = 15000;
+	public static final int HTTP_TIMEOUT = 15000;
 
 	public HttpFetcher() {
 	}
